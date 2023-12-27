@@ -1,0 +1,7 @@
+name: MalSystem
+version: '1.0-SNAPSHOT'
+main: me.sieben.malsystem.MalSystem
+
+commands:
+  design:
+

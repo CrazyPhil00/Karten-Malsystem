@@ -1,0 +1,17 @@
+
+canvas:
+  canvas_names:
+    - canvas_1
+
+  canvas_1:
+    x_pos_1: 160
+    y_pos_1: 116
+    z_pos_1: -201
+
+    x_pos_2: 144
+    y_pos_2: 131
+    z_pos_2: -201
+
+    x_tp: 151
+    y_tp: 121
+    z_tp: -215

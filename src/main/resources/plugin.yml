@@ -1,0 +1,7 @@
+name: MalSystem
+version: '${project.version}'
+main: me.sieben.malsystem.MalSystem
+
+commands:
+  design:
+

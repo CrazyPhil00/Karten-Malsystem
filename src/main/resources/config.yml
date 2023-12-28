@@ -15,3 +15,6 @@ canvas:
     x_tp: 151
     y_tp: 121
     z_tp: -215
+
+    width: 16
+    height : 16

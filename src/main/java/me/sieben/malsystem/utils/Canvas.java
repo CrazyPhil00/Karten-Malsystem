@@ -8,12 +8,16 @@ public class Canvas {
 
     int[] canvasPosStart;
     int[] canvasPosEnd;
+    int width;
+    int height;
     Location tpPos;
     boolean inUse;
 
-    public Canvas(int [] canvasPosStart, int[] canvasPosEnd, Location tpPos) {
+    public Canvas(int [] canvasPosStart, int[] canvasPosEnd, Location tpPos, int width, int height) {
         this.canvasPosStart = canvasPosStart;
         this.canvasPosEnd = canvasPosEnd;
+        this.width = width;
+        this.height = height;
         this.tpPos = tpPos;
         this.inUse = false;
     }
@@ -31,6 +35,14 @@ public class Canvas {
         return tpPos;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     public boolean isInUse() {
         return inUse;
     }
@@ -39,12 +51,14 @@ public class Canvas {
         this.inUse = inUse;
     }
 
-    public static Canvas getEmpty(ArrayList<Canvas> canvas) {
+    public static Canvas getEmpty(ArrayList<Canvas> canvas, int width, int height) {
         for (Canvas c : canvas) {
             if (!(c.inUse)) {
-                System.out.println(c.getCanvasPosEnd());
-                c.setInUse(true);
-                return c;
+                if (c.getWidth() == width && c.getHeight() == height) {
+                    c.setInUse(true);
+                    System.out.println(c);
+                    return c;
+                }
             }
         }
         return null; //TODO No empty Canvas Error

@@ -7,6 +7,8 @@ import org.bukkit.map.MapPalette;
 import org.bukkit.material.Dye;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class BlockUtils {
     int x;
     int y;
     Color color;
-
+    BufferedImage image;
 
 
     public BlockUtils(int x, int y, Color color) {
@@ -28,7 +30,6 @@ public class BlockUtils {
         this.y = y;
         this.color = color;
     }
-
 
     public static List<Block> generateBlocks(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
         int minX = Math.min(x1, x2);
@@ -69,17 +70,12 @@ public class BlockUtils {
             }
         });
 
-        for (BlockUtils blockUtils: blockUtilsList) {
-            System.out.println(blockUtils.getX() + ":" + blockUtils.getY() + "/" + blockUtils.getColor());
-        }
-
         return blockUtilsList;
     }
 
-    public static void convertToImage(List<BlockUtils> blockUtilsList, String outputImagePath) {
-        int originalSize = 16; // Assuming a 16x16 canvas
-        int scaledSize = 128; // Desired 128x128 canvas
-        int scaleFactor = scaledSize / originalSize; // Scale factor
+    public static BufferedImage convertToImage(List<BlockUtils> blockUtilsList, int originalSize) {
+        int scaledSize = 128;
+        int scaleFactor = scaledSize / originalSize;
 
         BufferedImage image = new BufferedImage(scaledSize, scaledSize, BufferedImage.TYPE_INT_RGB);
 
@@ -104,23 +100,19 @@ public class BlockUtils {
             }
         }
 
-        try {
-            File outputFile = new File(outputImagePath);
-            ImageIO.write(image, "png", outputFile);
-            System.out.println("Image saved to: " + outputImagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Mirror the image horizontally
+        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+        tx.translate(-image.getWidth(null), 0);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        image = op.filter(image, null);
+
+        // Rotate the image 90 degrees clockwise
+        AffineTransform rotateTransform = AffineTransform.getRotateInstance(Math.toRadians(90), scaledSize / 2.0, scaledSize / 2.0);
+        AffineTransformOp rotateOp = new AffineTransformOp(rotateTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        image = rotateOp.filter(image, null);
+
+        return image;
     }
-
-
-
-
-
-
-
-
-
 
 
 

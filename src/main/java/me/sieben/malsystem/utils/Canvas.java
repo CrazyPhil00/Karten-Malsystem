@@ -53,10 +53,9 @@ public class Canvas {
 
     public static Canvas getEmpty(ArrayList<Canvas> canvas, int width, int height) {
         for (Canvas c : canvas) {
-            if (!(c.inUse)) {
+            if (!(c.isInUse())) {
                 if (c.getWidth() == width && c.getHeight() == height) {
                     c.setInUse(true);
-                    System.out.println(c);
                     return c;
                 }
             }

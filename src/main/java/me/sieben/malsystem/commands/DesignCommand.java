@@ -7,20 +7,16 @@ import me.sieben.malsystem.utils.Canvas;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.bukkit.material.MaterialData;
 
 import java.util.HashMap;
-import java.util.List;
+
 
 public class DesignCommand implements CommandExecutor {
 
@@ -67,7 +63,9 @@ public class DesignCommand implements CommandExecutor {
                      saveInv(player);
                      giveColors(player);
 
-                 }else player.sendMessage("Can't create canvas.");
+                 }else {
+                     player.sendMessage("Can't create canvas.");
+                 }
 
 
 
@@ -88,21 +86,20 @@ public class DesignCommand implements CommandExecutor {
                 int[] posStart = canvas.getCanvasPosStart();
                 int[] posEnd = canvas.getCanvasPosEnd();
                 //TODO Save in file
-                MalSystem.playerBlockList.put(player,
-                        BlockUtils.generateBlocks(
-                            player.getWorld(),
-                            posStart[0],
-                            posStart[1],
-                            posStart[2],
-                            posEnd[0],
-                            posEnd[1],
-                            posEnd[2])
-                    );
 
-                MalSystem.relativeBlockList.put(player, BlockUtils.convertTo2DList(MalSystem.playerBlockList.get(player), canvas.getHeight()));
+                MalSystem.relativeBlockList.put(
+                        player, BlockUtils.convertTo2DList(
+                                    BlockUtils.generateBlocks(
+                                    player.getWorld(),
+                                    posStart[0],
+                                    posStart[1],
+                                    posStart[2],
+                                    posEnd[0],
+                                    posEnd[1],
+                                    posEnd[2]),
+                            canvas.getHeight()));
 
-                BlockUtils.convertToImage(MalSystem.relativeBlockList.get(player), "test.png");
-                createMap(player);
+                createMap(player, canvas.getWidth());
 
                 assignedPlayers.get(player).setInUse(false);
                 assignedPlayers.remove(player);
@@ -140,7 +137,6 @@ public class DesignCommand implements CommandExecutor {
 
     private void saveInv(Player player) {
         savedInv.put(player, player.getInventory().getContents());
-        System.out.println(savedInv.get(player));
         player.getInventory().clear();
     }
 
@@ -192,7 +188,7 @@ public class DesignCommand implements CommandExecutor {
 
     }
 
-    private void createMap(Player player) {
+    private void createMap(Player player, int size) {
         MapView view = Bukkit.createMap(player.getWorld());
 
 
@@ -202,7 +198,7 @@ public class DesignCommand implements CommandExecutor {
 
 
         CanvasRenderer mapRenderer = new CanvasRenderer();
-        mapRenderer.loadBlockList(MalSystem.relativeBlockList.get(player));
+        mapRenderer.loadImage(BlockUtils.convertToImage(MalSystem.relativeBlockList.get(player), size));
         view.addRenderer(mapRenderer);
 
 

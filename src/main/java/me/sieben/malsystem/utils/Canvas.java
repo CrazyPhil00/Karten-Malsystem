@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class Canvas {
 
+    public static ArrayList<String> canvasNames = new ArrayList<>();
+
     int[] canvasPosStart;
     int[] canvasPosEnd;
     int width;
@@ -13,7 +15,8 @@ public class Canvas {
     Location tpPos;
     boolean inUse;
 
-    public Canvas(int [] canvasPosStart, int[] canvasPosEnd, Location tpPos, int width, int height) {
+
+    public Canvas(int [] canvasPosStart, int[] canvasPosEnd, Location tpPos, int width, int height ) {
         this.canvasPosStart = canvasPosStart;
         this.canvasPosEnd = canvasPosEnd;
         this.width = width;
@@ -21,7 +24,6 @@ public class Canvas {
         this.tpPos = tpPos;
         this.inUse = false;
     }
-
 
     public int[] getCanvasPosEnd() {
         return canvasPosEnd;

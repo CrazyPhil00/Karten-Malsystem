@@ -236,7 +236,7 @@ public class DesignCommand implements CommandExecutor {
         CanvasRenderer mapRenderer = new CanvasRenderer();
 
         List<BlockUtils> list = MalSystem.relativeBlockList.get(player);
-        BlockUtils.saveImage(player, list, uID);
+        BlockUtils.saveImage(list, uID);
 
         mapRenderer.loadImage(BlockUtils.convertToImage(list, size));
 

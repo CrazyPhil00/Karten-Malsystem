@@ -114,9 +114,9 @@ public class BlockUtils {
         return image;
     }
 
-    public static void saveImage(Player player, List<BlockUtils> list, int Uid) {
+    public static void saveImage(List<BlockUtils> list, int Uid) {
 
-        File configFile = new File("plugins/MalSystem/images/" + player.getUniqueId() + "/" + Uid +".yml");
+        File configFile = new File("plugins/MalSystem/images/" + Uid +".yml");
         FileConfiguration config;
 
         if (!configFile.exists()) {
@@ -151,9 +151,9 @@ public class BlockUtils {
 
     }
 
-    public static BufferedImage loadImage(Player player, short Uid) {
+    public static BufferedImage loadImage(short Uid) {
 
-        File configFile = new File("plugins/MalSystem/images/" + player.getUniqueId() + "/" + Uid +".yml");
+        File configFile = new File("plugins/MalSystem/images/" + Uid +".yml");
         FileConfiguration config;
 
         if (!configFile.exists()) {
@@ -176,7 +176,6 @@ public class BlockUtils {
 
             list.add(i, block);
         }
-
 
         return BlockUtils.convertToImage(list, (int) Math.sqrt(size));
     }

@@ -1,7 +1,9 @@
 package me.sieben.malsystem;
 
+import me.sieben.malsystem.commands.CreateCanvas;
 import me.sieben.malsystem.commands.DesignCommand;
 import me.sieben.malsystem.listeners.DesignListener;
+import me.sieben.malsystem.renderer.CanvasRenderer;
 import me.sieben.malsystem.utils.BlockUtils;
 import me.sieben.malsystem.utils.Canvas;
 import org.bukkit.Bukkit;
@@ -9,9 +11,11 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
-import sun.security.provider.ConfigFile;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,28 +25,33 @@ import java.util.List;
 
 
 public final class MalSystem extends JavaPlugin {
-    public MalSystem() {
-
-    }
+    public static MalSystem instance;
 
     public static HashMap<Player, List<BlockUtils>> relativeBlockList = new HashMap<>();
     public static ArrayList<Canvas> canvasList = new ArrayList<>();
 
-    private File canvasConfigFile;
-    private FileConfiguration canvasConfig;
+    public File canvasConfigFile;
+    public FileConfiguration canvasConfig;
 
     @Override
     public void onEnable() {
 
+        instance = this;
+
         saveDefaultConfig();
 
 
-        if (loadCanvas()) System.out.println("Successfully loaded Canvases");
+        if (loadCanvases()) System.out.println("Successfully loaded Canvases");
         else System.out.println("Error while loading Canvases");
 
         getCommand("design").setExecutor(new DesignCommand());
 
+        getCommand("canvas").setExecutor(new CreateCanvas());
+        getCommand("canvas").setTabCompleter(new CreateCanvas());
+
+
         Bukkit.getPluginManager().registerEvents(new DesignListener(), this);
+
     }
 
     @Override
@@ -50,14 +59,17 @@ public final class MalSystem extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    public boolean loadCanvas() {
+
+    public boolean loadCanvases() {
+
         canvasConfigFile = new File("plugins/MalSystem/canvas.yml");
 
         if (!canvasConfigFile.exists()) {
             try {
                 canvasConfigFile.createNewFile();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                return false;
             }
 
             try (FileWriter writer = new FileWriter("plugins/MalSystem/canvas.yml")) {
@@ -71,6 +83,7 @@ public final class MalSystem extends JavaPlugin {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
         }
 
@@ -79,7 +92,7 @@ public final class MalSystem extends JavaPlugin {
         try {
             canvasConfig.save(canvasConfigFile);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return false;
         }
 
 
@@ -107,11 +120,39 @@ public final class MalSystem extends JavaPlugin {
             int width = canvasConfig.getInt("canvas." + s + ".width");
             int height = canvasConfig.getInt("canvas." + s + ".height");
 
-
+            Canvas.canvasNames.add(s);
             canvasList.add(new Canvas(posStart, posEnd, posTp, width, height));
         }
 
-        return true; // TODO Error handling
+
+
+
+        File dir = new File("plugins/MalSystem/images");
+
+        for (File file : dir.listFiles()) {
+            if (file.getName().endsWith(".yml")) {
+
+                short uID = (short) Integer.parseInt(file.getName().replaceAll(".yml", ""));
+
+                MapView view = Bukkit.getMap(uID);
+
+                for (MapRenderer renderer : view.getRenderers()) {
+                    view.removeRenderer(renderer);
+                }
+
+                CanvasRenderer mapRenderer = new CanvasRenderer();
+                BufferedImage image = BlockUtils.loadImage(uID);
+                mapRenderer.loadImage(image);
+                view.addRenderer(mapRenderer);
+
+            }
+        }
+
+        return true;
+
     }
 
+    public static MalSystem getInstance() {
+        return instance;
+    }
 }

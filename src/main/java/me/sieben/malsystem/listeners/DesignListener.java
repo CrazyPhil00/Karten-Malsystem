@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
@@ -74,33 +75,6 @@ public class DesignListener implements Listener {
 
         }
     }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        System.out.println("test");
-
-            for (ItemStack item : player.getInventory().getContents()) {
-                if (item == null) return;
-                if (!(item.getType() == Material.MAP)) return;
-                if (item.getItemMeta() == null) return;
-                if (!(item.getItemMeta().hasLocalizedName())) return;
-
-                System.out.println("test");
-                short uID = (short) Integer.parseInt(item.getItemMeta().getLocalizedName());
-
-                MapView view = Bukkit.getMap(uID);
-
-                for (MapRenderer renderer : view.getRenderers()) {
-                    view.removeRenderer(renderer);
-                }
-
-                CanvasRenderer mapRenderer = new CanvasRenderer();
-                BufferedImage image = BlockUtils.loadImage(player, uID);
-                mapRenderer.loadImage(image);
-                view.addRenderer(mapRenderer);
-
-        }
-
-    }
 }
+
+

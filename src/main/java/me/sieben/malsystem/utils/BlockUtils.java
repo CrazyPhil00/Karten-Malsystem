@@ -3,10 +3,10 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.map.MapPalette;
-import org.bukkit.material.Dye;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
-import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -114,6 +114,73 @@ public class BlockUtils {
         return image;
     }
 
+    public static void saveImage(Player player, List<BlockUtils> list, int Uid) {
+
+        File configFile = new File("plugins/MalSystem/images/" + player.getUniqueId() + "/" + Uid +".yml");
+        FileConfiguration config;
+
+        if (!configFile.exists()) {
+
+            configFile.getParentFile().mkdirs();
+            try {
+                configFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            config = YamlConfiguration.loadConfiguration(configFile);
+
+            int index = 0;
+
+            for (BlockUtils block : list) {
+                config.set(index + ".x", block.getX());
+                config.set(index + ".y", block.getY());
+                config.set(index + ".color", block.getColor().asRGB());
+
+                index ++;
+            }
+
+            config.set("size", index);
+
+            try {
+                config.save(configFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    public static BufferedImage loadImage(Player player, short Uid) {
+
+        File configFile = new File("plugins/MalSystem/images/" + player.getUniqueId() + "/" + Uid +".yml");
+        FileConfiguration config;
+
+        if (!configFile.exists()) {
+            System.out.println("No image to load!");
+            return null;
+        }
+        config = YamlConfiguration.loadConfiguration(configFile);
+
+        int size = config.getInt("size");
+
+        List<BlockUtils> list = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            BlockUtils block = new BlockUtils(
+                    config.getInt(i + ".x"),
+                    config.getInt(i + ".y"),
+                    Color.fromRGB(config.getInt(i + ".color"))
+            );
+
+
+            list.add(i, block);
+        }
+
+
+        return BlockUtils.convertToImage(list, (int) Math.sqrt(size));
+    }
+
 
 
     public Color getColor() {
@@ -126,5 +193,17 @@ public class BlockUtils {
 
     public int getY() {
         return y;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

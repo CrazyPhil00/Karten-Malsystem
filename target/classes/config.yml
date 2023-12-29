@@ -1,9 +1,14 @@
 
 canvas:
-  canvas_names:
-    - canvas_1
 
-  canvas_1:
+
+
+
+  canvas_names:
+    - canvas_small
+    - canvas_medium
+
+  canvas_small:
     x_pos_1: 160
     y_pos_1: 116
     z_pos_1: -201
@@ -18,3 +23,20 @@ canvas:
 
     width: 16
     height : 16
+
+  canvas_medium:
+
+    x_pos_1: 297
+    y_pos_1: 163
+    z_pos_1: -252
+
+    x_pos_2: 144
+    y_pos_2: 195
+    z_pos_2: -252
+
+    x_tp: 313
+    y_tp: 181
+    z_tp: -276
+
+    width: 32
+    height: 32

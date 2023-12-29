@@ -1,8 +1,21 @@
+/**
+ * TODO
+ *
+ * - Confirm Reset
+ *
+ */
+
+
+
+
 package me.sieben.malsystem.listeners;
 
+import me.sieben.malsystem.MalSystem;
 import me.sieben.malsystem.commands.DesignCommand;
+import me.sieben.malsystem.renderer.CanvasRenderer;
 import me.sieben.malsystem.utils.BlockUtils;
 import me.sieben.malsystem.utils.Canvas;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,9 +23,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
-
 
 public class DesignListener implements Listener {
 
@@ -20,6 +37,7 @@ public class DesignListener implements Listener {
     @EventHandler
     public void onBlockClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        Block block = null;
 
         if (event.getItem() == null) return;
         if (!(DesignCommand.assignedPlayers.containsKey(player))) return;
@@ -27,15 +45,14 @@ public class DesignListener implements Listener {
 
         if (event.getMaterial() == Material.INK_SACK) {
 
-            if (event.getClickedBlock() == null) return;
-            if (event.getClickedBlock().getType() != Material.WOOL) return;
+            if (event.getClickedBlock() == null) block = player.getTargetBlock(null, 50);
+            else if (event.getClickedBlock().getType() == Material.WOOL) block = event.getClickedBlock();
 
             byte color = event.getItem().getData().getData();
 
-            event.getClickedBlock().setData(DyeColor.getByDyeData(color).getWoolData());
+            block.setData(DyeColor.getByDyeData(color).getWoolData());
 
         } else if (event.getMaterial() == Material.BARRIER) {
-            //TODO Confirm Reset
             event.setCancelled(true);
             Canvas canvas = DesignCommand.assignedPlayers.get(player);
 
@@ -56,5 +73,34 @@ public class DesignListener implements Listener {
             }
 
         }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        System.out.println("test");
+
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item == null) return;
+                if (!(item.getType() == Material.MAP)) return;
+                if (item.getItemMeta() == null) return;
+                if (!(item.getItemMeta().hasLocalizedName())) return;
+
+                System.out.println("test");
+                short uID = (short) Integer.parseInt(item.getItemMeta().getLocalizedName());
+
+                MapView view = Bukkit.getMap(uID);
+
+                for (MapRenderer renderer : view.getRenderers()) {
+                    view.removeRenderer(renderer);
+                }
+
+                CanvasRenderer mapRenderer = new CanvasRenderer();
+                BufferedImage image = BlockUtils.loadImage(player, uID);
+                mapRenderer.loadImage(image);
+                view.addRenderer(mapRenderer);
+
+        }
+
     }
 }

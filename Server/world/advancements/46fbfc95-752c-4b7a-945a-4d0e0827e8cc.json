@@ -89,6 +89,12 @@
     },
     "done": true
   },
+  "minecraft:story/obtain_armor": {
+    "criteria": {
+      "iron_helmet": "2023-12-29 14:59:22 +0100"
+    },
+    "done": true
+  },
   "minecraft:recipes/misc/light_blue_dye_from_lapis_bonemeal": {
     "criteria": {
       "has_lapis": "2023-12-27 18:04:52 +0100"
@@ -147,6 +153,7 @@
     "criteria": {
       "forest": "2023-12-27 18:59:07 +0100",
       "desert_hills": "2023-12-28 16:08:35 +0100",
+      "forest_hills": "2023-12-29 20:39:53 +0100",
       "plains": "2023-12-27 17:59:06 +0100",
       "savanna": "2023-12-27 18:47:28 +0100",
       "desert": "2023-12-27 17:59:26 +0100"
@@ -201,9 +208,21 @@
     },
     "done": true
   },
+  "minecraft:recipes/decorations/red_carpet": {
+    "criteria": {
+      "has_red_wool": "2023-12-29 20:40:57 +0100"
+    },
+    "done": true
+  },
   "minecraft:recipes/misc/light_gray_dye_from_ink_bonemeal": {
     "criteria": {
       "has_black_dye": "2023-12-27 18:04:08 +0100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/red_bed": {
+    "criteria": {
+      "has_red_wool": "2023-12-29 20:40:57 +0100"
     },
     "done": true
   },
@@ -330,6 +349,12 @@
   "minecraft:recipes/decorations/white_carpet": {
     "criteria": {
       "has_white_wool": "2023-12-27 18:13:19 +0100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/red_banner": {
+    "criteria": {
+      "has_red_wool": "2023-12-29 20:40:57 +0100"
     },
     "done": true
   },

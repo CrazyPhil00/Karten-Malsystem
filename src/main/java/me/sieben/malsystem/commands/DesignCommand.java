@@ -1,10 +1,24 @@
+/**
+ *
+ * TODO BUG:
+ * - Player Leaving Server
+ *
+ */
+
+
+
+
 package me.sieben.malsystem.commands;
 
+import de.infinitycity.banksystem.apis.buy.BuyAPI;
 import me.sieben.malsystem.MalSystem;
 import me.sieben.malsystem.renderer.CanvasRenderer;
 import me.sieben.malsystem.utils.BlockUtils;
 import me.sieben.malsystem.utils.Canvas;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -12,16 +26,22 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 
 public class DesignCommand implements CommandExecutor {
 
     private HashMap<Player, ItemStack[]> savedInv = new HashMap<>();
     public static HashMap<Player, Canvas> assignedPlayers = new HashMap<>();
+
+    private ArrayList<Player> confirmAbort = new ArrayList<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -79,13 +99,10 @@ public class DesignCommand implements CommandExecutor {
                     return false;
                 }
 
-                loadInv(player);
-
                 Canvas canvas = assignedPlayers.get(player);
 
                 int[] posStart = canvas.getCanvasPosStart();
                 int[] posEnd = canvas.getCanvasPosEnd();
-                //TODO Save in file
 
                 MalSystem.relativeBlockList.put(
                         player, BlockUtils.convertTo2DList(
@@ -101,12 +118,32 @@ public class DesignCommand implements CommandExecutor {
 
                 createMap(player, canvas.getWidth());
 
-                assignedPlayers.get(player).setInUse(false);
-                assignedPlayers.remove(player);
-
 
 
                 break;
+            }
+
+            case ("exit"):
+            {
+
+                if (confirmAbort.contains(player)) {
+                    loadInv(player);
+
+                    assignedPlayers.get(player).setInUse(false);
+                    assignedPlayers.remove(player);
+                    confirmAbort.remove(player);
+                }else {
+
+                    player.sendMessage("Do you really want to exit? The Image will not be saved!");
+
+                    TextComponent component = new TextComponent(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "[Exit]")));
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/design exit"));
+
+                    player.spigot().sendMessage(component);
+                    confirmAbort.add(player);
+
+                }
+
             }
         }
 
@@ -195,16 +232,40 @@ public class DesignCommand implements CommandExecutor {
         for (MapRenderer renderer : view.getRenderers()) {
             view.removeRenderer(renderer);
         }
-
-
+        int uID = view.getId();
         CanvasRenderer mapRenderer = new CanvasRenderer();
-        mapRenderer.loadImage(BlockUtils.convertToImage(MalSystem.relativeBlockList.get(player), size));
+
+        List<BlockUtils> list = MalSystem.relativeBlockList.get(player);
+        BlockUtils.saveImage(player, list, uID);
+
+        mapRenderer.loadImage(BlockUtils.convertToImage(list, size));
+
+
         view.addRenderer(mapRenderer);
 
-
-
         ItemStack map = new ItemStack(Material.MAP, 1, view.getId());
-        player.getInventory().addItem(map);
+        MapMeta meta = (MapMeta) map.getItemMeta();
+        meta.setDisplayName(ChatColor.DARK_GRAY + "Map of " + ChatColor.BLUE + "" + ChatColor.BOLD + player.getName());
+        meta.setLocalizedName(String.valueOf(uID));
+        map.setItemMeta(meta);
+
+        BuyAPI.buySingleItem(player, map, 50, new BuyAPI.BuyCallback() {
+            @Override
+            public void success(Player player) {
+                player.sendMessage("Success");
+
+                loadInv(player);
+                player.getInventory().addItem(map);
+
+                assignedPlayers.get(player).setInUse(false);
+                assignedPlayers.remove(player);
+            }
+
+            @Override
+            public void abort(Player player) {
+                player.sendMessage("Abort");
+            }
+        });
 
     }
 }

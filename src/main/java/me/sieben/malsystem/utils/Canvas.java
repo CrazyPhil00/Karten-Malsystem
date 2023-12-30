@@ -4,11 +4,9 @@ import me.sieben.malsystem.MalSystem;
 import me.sieben.malsystem.commands.DesignCommand;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Canvas {
 
@@ -113,7 +111,8 @@ public class Canvas {
         return assignedPlayers.containsKey(player);
     }
 
-    public static void removedAssignedPlayer(Player player) {
+    public static void removeAssignedPlayer(Player player) {
+        assignedPlayers.get(player).setInUse(false);
         assignedPlayers.remove(player);
     }
 }

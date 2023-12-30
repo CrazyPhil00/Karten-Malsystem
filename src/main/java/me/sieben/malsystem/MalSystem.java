@@ -49,6 +49,7 @@ public final class MalSystem extends JavaPlugin {
         else System.out.println(pluginPrefix + "Error while loading Canvases");
 
         getCommand("canvas-npc").setExecutor(new NPCCommand());
+        getCommand("canvas-npc").setTabCompleter(new NPCCommand());
 
         getCommand("design").setExecutor(new DesignCommand());
 

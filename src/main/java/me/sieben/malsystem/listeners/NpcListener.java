@@ -1,9 +1,11 @@
 package me.sieben.malsystem.listeners;
 
 import me.sieben.malsystem.commands.DesignCommand;
+import me.sieben.malsystem.commands.NPCCommand;
 import me.sieben.malsystem.gui.NPCGui;
 import me.sieben.malsystem.utils.Canvas;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
@@ -20,18 +22,18 @@ public class NpcListener implements Listener {
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (event.getRightClicked().getType() == EntityType.VILLAGER) {
             Player player = event.getPlayer();
-            Villager npc = (Villager) event.getRightClicked();
+            Entity npc = event.getRightClicked();
 
             if (npc.getCustomName() == null) return;
 
 
 
-            if (npc.getCustomName().equalsIgnoreCase("NPC-CREATECANVAS")) {
+            if (NPCCommand.getNPCMetadata(npc, "npc-type").equals("CREATE-CANVAS")) {
                 event.setCancelled(true);
                 new NPCGui().openGuiCreateMap(player);
             }
 
-            else if (npc.getCustomName().equalsIgnoreCase("NPC-SAVECANVAS")) {
+            else if (NPCCommand.getNPCMetadata(npc, "npc-type").equals("SAVE-CANVAS")) {
                 event.setCancelled(true);
                 new NPCGui().openGuiSaveMap(player);
             }

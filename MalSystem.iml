@@ -31,5 +31,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.12-SNAPSHOT" level="project" />
     <orderEntry type="library" name="BankSystem-2.0NEWEST" level="project" />
     <orderEntry type="library" name="BankSystem" level="project" />
+    <orderEntry type="library" name="craftbukkit-1.12.2" level="project" />
   </component>
 </module>

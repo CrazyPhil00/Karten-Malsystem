@@ -13,6 +13,7 @@ npc:
         lore-2: "&6%empty-canvas-amount% &7empty Canvases"
         lore-3: ""
 
+        price: 50
         canvas-size: 16
 
       15:
@@ -22,12 +23,13 @@ npc:
         lore-2: "&6%empty-canvas-amount% &7empty Canvases"
         lore-3: ""
 
+        price: 100
         canvas-size: 32
 
   save-canvas:
     item-slot:
       12:
-        material: "emerald"
+        material: "EMERALD"
         name: "&2&lBuy"
 
         lore-1: ""
@@ -35,7 +37,7 @@ npc:
         lore-3: ""
 
       14:
-        material: "barrier"
+        material: "BARRIER"
         name: "&c&lExit"
 
         lore-1: "&4Your Painting will not be saved!"

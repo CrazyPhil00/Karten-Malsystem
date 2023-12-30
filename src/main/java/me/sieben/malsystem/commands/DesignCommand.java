@@ -33,7 +33,6 @@ import org.bukkit.map.MapView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 
 public class DesignCommand implements CommandExecutor {
@@ -196,8 +195,8 @@ public class DesignCommand implements CommandExecutor {
 
         loadInv(player);
 
-        Canvas.assignedPlayers.get(player).setInUse(false);
-        Canvas.assignedPlayers.remove(player);
+
+        Canvas.removeAssignedPlayer(player);
     }
 
     public static void saveMap(Player player) {
@@ -250,7 +249,20 @@ public class DesignCommand implements CommandExecutor {
         meta.setLocalizedName(String.valueOf(uID));
         map.setItemMeta(meta);
 
-        BuyAPI.buySingleItem(player, map, 50, new BuyAPI.BuyCallback() {
+        String config_path = "npc.select-canvas.item-slot.";
+
+        float price = 50;
+
+        for (int i = 0; i < 26; i++) {
+            if (MalSystem.getInstance().getConfig().isSet(config_path + i)) {
+                if (canvas.getWidth() == MalSystem.getInstance().getConfig().getInt(config_path + i + ".canvas-size")) {
+                    price = MalSystem.getInstance().getConfig().getInt(config_path + i + ".price");
+                }
+            }
+        }
+
+
+        BuyAPI.buySingleItem(player, map, price, new BuyAPI.BuyCallback() {
             @Override
             public void success(Player player) {
                 player.sendMessage(MalSystem.pluginPrefix + "Success");
@@ -259,7 +271,7 @@ public class DesignCommand implements CommandExecutor {
                 player.getInventory().addItem(map);
 
                 Canvas.getAssignedPlayer(player).setInUse(false);
-                Canvas.removedAssignedPlayer(player);
+                Canvas.removeAssignedPlayer(player);
             }
 
             @Override

@@ -256,6 +256,12 @@
     },
     "done": true
   },
+  "minecraft:recipes/building_blocks/coal_block": {
+    "criteria": {
+      "has_at_least_9_coal": "2023-12-30 20:51:55 +0100"
+    },
+    "done": true
+  },
   "minecraft:recipes/misc/purple_dye": {
     "criteria": {
       "has_red_dye": "2023-12-27 18:04:51 +0100"
@@ -283,6 +289,12 @@
   "minecraft:recipes/building_blocks/oak_planks": {
     "criteria": {
       "has_log": "2023-12-27 18:58:17 +0100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/redstone/dispenser": {
+    "criteria": {
+      "has_bow": "2023-12-30 20:51:40 +0100"
     },
     "done": true
   },
@@ -330,6 +342,7 @@
   },
   "minecraft:adventure/kill_all_mobs": {
     "criteria": {
+      "husk": "2023-12-30 16:24:40 +0100",
       "creeper": "2023-12-27 18:58:57 +0100"
     },
     "done": false
@@ -433,6 +446,12 @@
   "minecraft:recipes/building_blocks/yellow_wool": {
     "criteria": {
       "has_white_wool": "2023-12-27 18:13:19 +0100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/misc/coal": {
+    "criteria": {
+      "has_the_recipe": "2023-12-30 20:51:55 +0100"
     },
     "done": true
   },

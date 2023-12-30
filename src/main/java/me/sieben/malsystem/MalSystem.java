@@ -2,7 +2,9 @@ package me.sieben.malsystem;
 
 import me.sieben.malsystem.commands.CreateCanvas;
 import me.sieben.malsystem.commands.DesignCommand;
+import me.sieben.malsystem.commands.NPCCommand;
 import me.sieben.malsystem.listeners.DesignListener;
+import me.sieben.malsystem.listeners.NpcListener;
 import me.sieben.malsystem.renderer.CanvasRenderer;
 import me.sieben.malsystem.utils.BlockUtils;
 import me.sieben.malsystem.utils.Canvas;
@@ -29,6 +31,7 @@ public final class MalSystem extends JavaPlugin {
 
     public static HashMap<Player, List<BlockUtils>> relativeBlockList = new HashMap<>();
     public static ArrayList<Canvas> canvasList = new ArrayList<>();
+    public static String pluginPrefix;
 
     public File canvasConfigFile;
     public FileConfiguration canvasConfig;
@@ -40,9 +43,12 @@ public final class MalSystem extends JavaPlugin {
 
         saveDefaultConfig();
 
+        pluginPrefix = getConfig().getString("plugin-prefix").replaceAll("&", "§");
 
-        if (loadCanvases()) System.out.println("Successfully loaded Canvases");
-        else System.out.println("Error while loading Canvases");
+        if (loadCanvases()) System.out.println(pluginPrefix + "Successfully loaded Canvases");
+        else System.out.println(pluginPrefix + "Error while loading Canvases");
+
+        getCommand("canvas-npc").setExecutor(new NPCCommand());
 
         getCommand("design").setExecutor(new DesignCommand());
 
@@ -51,6 +57,8 @@ public final class MalSystem extends JavaPlugin {
 
 
         Bukkit.getPluginManager().registerEvents(new DesignListener(), this);
+        Bukkit.getPluginManager().registerEvents(new NpcListener(), this);
+
 
     }
 
@@ -62,7 +70,7 @@ public final class MalSystem extends JavaPlugin {
 
     public boolean loadCanvases() {
 
-        canvasConfigFile = new File("plugins/MalSystem/canvas.yml");
+        canvasConfigFile = new File("plugins/CanvasMap/canvas.yml");
 
         if (!canvasConfigFile.exists()) {
             try {
@@ -72,9 +80,10 @@ public final class MalSystem extends JavaPlugin {
                 return false;
             }
 
-            try (FileWriter writer = new FileWriter("plugins/MalSystem/canvas.yml")) {
+            try (FileWriter writer = new FileWriter("plugins/CanvasMap/canvas.yml")) {
                 // Manually add comments as strings in the YAML file
                 writer.write("#\n" +
+                        "#Supported Canvas sizes: 2, 4, 8, 16, 32, 64, 128\n" +
                         "# Canvas File size (The file size of the images that are being saved):\n" +
                         "# 16 * 16 pixel = 11kb\n" +
                         "# 32 * 32 pixel = 42kb\n" +
@@ -127,7 +136,7 @@ public final class MalSystem extends JavaPlugin {
 
 
 
-        File dir = new File("plugins/MalSystem/images");
+        File dir = new File("plugins/CanvasMap/images");
 
         for (File file : dir.listFiles()) {
             if (file.getName().endsWith(".yml")) {
@@ -151,6 +160,7 @@ public final class MalSystem extends JavaPlugin {
         return true;
 
     }
+
 
     public static MalSystem getInstance() {
         return instance;

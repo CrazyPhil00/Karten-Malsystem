@@ -1,4 +1,4 @@
-name: MalSystem
+name: CanvasMap
 version: '${project.version}'
 main: me.sieben.malsystem.MalSystem
 api-version: 1.12
@@ -9,4 +9,5 @@ depend:
 commands:
   design:
   canvas:
+  canvas-npc:
 

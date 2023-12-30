@@ -1,4 +1,5 @@
 package me.sieben.malsystem.utils;
+import me.sieben.malsystem.MalSystem;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.World;
@@ -61,12 +62,12 @@ public class BlockUtils {
 
         blockList.forEach(block -> {
             int x = block.getX() - minX;
-            int y = block.getY() - minY; // Do not adjust maxY here
+            int y = block.getY() - minY;
 
 
             if (x >= 0 && x < size && y >= 0 && y < size) {
                 blockUtilsList.add(new BlockUtils(x + 1, maxY - y + 1,
-                        DyeColor.getByWoolData(block.getData()).getColor())); // Adjust maxY here (MapPalette.matchColor(r, g, b))
+                        DyeColor.getByWoolData(block.getData()).getColor()));
             }
         });
 
@@ -100,13 +101,11 @@ public class BlockUtils {
             }
         }
 
-        // Mirror the image horizontally
         AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
         tx.translate(-image.getWidth(null), 0);
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         image = op.filter(image, null);
 
-        // Rotate the image 90 degrees clockwise
         AffineTransform rotateTransform = AffineTransform.getRotateInstance(Math.toRadians(90), scaledSize / 2.0, scaledSize / 2.0);
         AffineTransformOp rotateOp = new AffineTransformOp(rotateTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         image = rotateOp.filter(image, null);
@@ -116,7 +115,7 @@ public class BlockUtils {
 
     public static void saveImage(List<BlockUtils> list, int Uid) {
 
-        File configFile = new File("plugins/MalSystem/images/" + Uid +".yml");
+        File configFile = new File("plugins/CanvasMap/images/" + Uid +".yml");
         FileConfiguration config;
 
         if (!configFile.exists()) {
@@ -153,11 +152,11 @@ public class BlockUtils {
 
     public static BufferedImage loadImage(short Uid) {
 
-        File configFile = new File("plugins/MalSystem/images/" + Uid +".yml");
+        File configFile = new File("plugins/CanvasMap/images/" + Uid +".yml");
         FileConfiguration config;
 
         if (!configFile.exists()) {
-            System.out.println("No image to load!");
+            System.out.println(MalSystem.pluginPrefix + "No image to load!");
             return null;
         }
         config = YamlConfiguration.loadConfiguration(configFile);

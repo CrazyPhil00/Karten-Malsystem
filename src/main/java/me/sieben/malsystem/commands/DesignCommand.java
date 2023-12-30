@@ -38,23 +38,22 @@ import java.util.UUID;
 
 public class DesignCommand implements CommandExecutor {
 
-    private HashMap<Player, ItemStack[]> savedInv = new HashMap<>();
-    public static HashMap<Player, Canvas> assignedPlayers = new HashMap<>();
 
+    private static HashMap<Player, ItemStack[]> savedInv = new HashMap<>();
     private ArrayList<Player> confirmAbort = new ArrayList<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("You cannot use this command!");
+            sender.sendMessage(MalSystem.pluginPrefix + "You cannot use this command!");
             return false;
         }
 
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            player.sendMessage("/design help");
+            player.sendMessage(MalSystem.pluginPrefix + "/design help");
             return false;
         }
 
@@ -71,20 +70,17 @@ public class DesignCommand implements CommandExecutor {
             {
 
                 if (args.length < 3) {
-                    player.sendMessage("Enter a width and a size!");
+                    player.sendMessage(MalSystem.pluginPrefix + "Enter a width and a size!");
                     return false;
                 }
 
                  int width = Integer.parseInt(args[1]);
                  int height = Integer.parseInt(args[2]);
 
-                 if (createCanvas(player, width, height)) {
-
-                     saveInv(player);
-                     giveColors(player);
-
+                 if (Canvas.createCanvas(player, width, height)) {
+                     player.sendMessage(MalSystem.pluginPrefix + "Created Canvas");
                  }else {
-                     player.sendMessage("Can't create canvas.");
+                     player.sendMessage(MalSystem.pluginPrefix + "Can't create canvas.");
                  }
 
 
@@ -94,29 +90,13 @@ public class DesignCommand implements CommandExecutor {
 
             case ("save"):
             {
-                if (!(savedInv.containsKey(player)) &! assignedPlayers.containsKey(player)) {
-                    player.sendMessage("Can't save canvas.");
+                if (!(savedInv.containsKey(player)) &! Canvas.containsAssignedPlayer(player)) {
+                    player.sendMessage(MalSystem.pluginPrefix + "Can't save canvas.");
                     return false;
                 }
 
-                Canvas canvas = assignedPlayers.get(player);
 
-                int[] posStart = canvas.getCanvasPosStart();
-                int[] posEnd = canvas.getCanvasPosEnd();
-
-                MalSystem.relativeBlockList.put(
-                        player, BlockUtils.convertTo2DList(
-                                    BlockUtils.generateBlocks(
-                                    player.getWorld(),
-                                    posStart[0],
-                                    posStart[1],
-                                    posStart[2],
-                                    posEnd[0],
-                                    posEnd[1],
-                                    posEnd[2]),
-                            canvas.getHeight()));
-
-                createMap(player, canvas.getWidth());
+                saveMap(player);
 
 
 
@@ -126,15 +106,17 @@ public class DesignCommand implements CommandExecutor {
             case ("exit"):
             {
 
-                if (confirmAbort.contains(player)) {
-                    loadInv(player);
+                if (!(Canvas.containsAssignedPlayer(player))) {
+                    player.sendMessage(MalSystem.pluginPrefix + "You are currently not drawing");
+                    return false;
+                }
 
-                    assignedPlayers.get(player).setInUse(false);
-                    assignedPlayers.remove(player);
+                if (confirmAbort.contains(player)) {
+                    exitMap(player);
                     confirmAbort.remove(player);
                 }else {
 
-                    player.sendMessage("Do you really want to exit? The Image will not be saved!");
+                    player.sendMessage(MalSystem.pluginPrefix + "Do you really want to exit? The Image will not be saved!");
 
                     TextComponent component = new TextComponent(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "[Exit]")));
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/design exit"));
@@ -153,38 +135,19 @@ public class DesignCommand implements CommandExecutor {
     }
 
 
-    private boolean createCanvas(Player player, int width, int height) {
-        if (assignedPlayers.containsKey(player)) {
-            player.sendMessage("You are already using a canvas.");
-            return false;
-        }
-        Canvas canvas = Canvas.getEmpty(MalSystem.canvasList, width, height);
-
-        if (canvas == null) {
-            player.sendMessage("Error while Creating Canvas.");
-            return false;
-        }
-
-        assignedPlayers.put(player, canvas);
-
-        player.teleport(canvas.getTpPos());
-
-        return true;
-    }
-
-    private void saveInv(Player player) {
+    public static void saveInv(Player player) {
         savedInv.put(player, player.getInventory().getContents());
         player.getInventory().clear();
     }
 
-    private void loadInv(Player player) {
+    public static void loadInv(Player player) {
         player.getInventory().clear();
         player.getInventory().setContents(savedInv.get(player));
         savedInv.remove(player);
 
     }
 
-    private void giveColors(Player player) {
+    public static void giveColors(Player player) {
 
         ItemStack red = new ItemStack(Material.INK_SACK);
         red.setDurability(DyeColor.RED.getDyeData());
@@ -225,7 +188,45 @@ public class DesignCommand implements CommandExecutor {
 
     }
 
-    private void createMap(Player player, int size) {
+    public static void exitMap(Player player) {
+        if (!(Canvas.containsAssignedPlayer(player))) {
+            player.sendMessage(MalSystem.pluginPrefix + "Error while getting Canvas");
+            return;
+        }
+
+        loadInv(player);
+
+        Canvas.assignedPlayers.get(player).setInUse(false);
+        Canvas.assignedPlayers.remove(player);
+    }
+
+    public static void saveMap(Player player) {
+
+        Canvas canvas = Canvas.getAssignedPlayer(player);
+
+        if (canvas == null) {
+            player.sendMessage(MalSystem.pluginPrefix + "Error while getting Canvas");
+            return;
+        }
+
+        int[] posStart = canvas.getCanvasPosStart();
+        int[] posEnd = canvas.getCanvasPosEnd();
+
+        MalSystem.relativeBlockList.put(
+                player, BlockUtils.convertTo2DList(
+                        BlockUtils.generateBlocks(
+                                player.getWorld(),
+                                posStart[0],
+                                posStart[1],
+                                posStart[2],
+                                posEnd[0],
+                                posEnd[1],
+                                posEnd[2]),
+                        canvas.getHeight()));
+
+        int size = canvas.getWidth();
+
+
         MapView view = Bukkit.createMap(player.getWorld());
 
 
@@ -252,18 +253,18 @@ public class DesignCommand implements CommandExecutor {
         BuyAPI.buySingleItem(player, map, 50, new BuyAPI.BuyCallback() {
             @Override
             public void success(Player player) {
-                player.sendMessage("Success");
+                player.sendMessage(MalSystem.pluginPrefix + "Success");
 
                 loadInv(player);
                 player.getInventory().addItem(map);
 
-                assignedPlayers.get(player).setInUse(false);
-                assignedPlayers.remove(player);
+                Canvas.getAssignedPlayer(player).setInUse(false);
+                Canvas.removedAssignedPlayer(player);
             }
 
             @Override
             public void abort(Player player) {
-                player.sendMessage("Abort");
+                player.sendMessage(MalSystem.pluginPrefix + "Abort");
             }
         });
 

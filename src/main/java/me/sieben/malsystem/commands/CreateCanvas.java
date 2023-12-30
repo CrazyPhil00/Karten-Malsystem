@@ -30,7 +30,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("You are not a Player");
+            sender.sendMessage(MalSystem.pluginPrefix + "You are not a Player");
             return false;
         }
 
@@ -47,11 +47,9 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
 
         if (args.length == 0)
         {
-            player.sendMessage("/help");
+            player.sendMessage(MalSystem.pluginPrefix + "/help");
             return false;
         }
-
-        player.sendMessage(String.valueOf(args.length));
 
         switch (args[0])
         {
@@ -60,7 +58,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             {
 
                 if (args.length != 10) {
-                    player.sendMessage("/usage");
+                    player.sendMessage(MalSystem.pluginPrefix + "/usage");
                     return false;
                 }
 
@@ -107,8 +105,8 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
                 }
 
                 if (MalSystem.getInstance().loadCanvases()) {
-                    player.sendMessage("Reloaded all Canvases!");
-                }else player.sendMessage("Error loading Canvases");
+                    player.sendMessage(MalSystem.pluginPrefix + "Reloaded all Canvases!");
+                }else player.sendMessage(MalSystem.pluginPrefix + "Error loading Canvases");
 
                 break;
             }
@@ -117,7 +115,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             case ("delete"):
             {
                 if (!(args.length == 2)) {
-                    player.sendMessage("/usage");
+                    player.sendMessage(MalSystem.pluginPrefix + "/usage");
                     return false;
                 }
 
@@ -139,7 +137,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
                     throw new RuntimeException(e);
                 }
 
-                player.sendMessage("Deleted Canvas " + canvasName);
+                player.sendMessage(MalSystem.pluginPrefix + "Deleted Canvas " + canvasName);
 
                 break;
             }
@@ -149,8 +147,8 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             case ("reload"):
             {
                 if (MalSystem.getInstance().loadCanvases()) {
-                    player.sendMessage("Reloaded all Canvases!");
-                }else player.sendMessage("Error loading Canvases");
+                    player.sendMessage(MalSystem.pluginPrefix + "Reloaded all Canvases!");
+                }else player.sendMessage(MalSystem.pluginPrefix + "Error loading Canvases");
                 break;
             }
 
@@ -158,7 +156,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             default:
             {
 
-                player.sendMessage("/help");
+                player.sendMessage(MalSystem.pluginPrefix + "/help");
 
             }
 

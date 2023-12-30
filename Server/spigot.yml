@@ -13,16 +13,16 @@
 config-version: 11
 settings:
   debug: false
+  moved-too-quickly-multiplier: 10.0
   save-user-cache-on-stop-only: false
   sample-count: 12
   filter-creative-items: true
-  moved-too-quickly-multiplier: 10.0
   moved-wrongly-threshold: 0.0625
-  late-bind: false
+  user-cache-size: 1000
   player-shuffle: 0
   bungeecord: false
+  late-bind: false
   int-cache-limit: 1024
-  user-cache-size: 1000
   item-dirty-ticks: 20
   timeout-time: 60
   restart-on-crash: true
@@ -35,6 +35,10 @@ settings:
       max: 2048.0
     attackDamage:
       max: 2048.0
+advancements:
+  disable-saving: false
+  disabled:
+  - minecraft:story/disabled
 commands:
   tab-complete: 0
   silent-commandblock-console: false
@@ -53,10 +57,6 @@ messages:
   outdated-client: Outdated client! Please use {0}
   outdated-server: Outdated server! I'm still on {0}
   restart: Server is restarting
-advancements:
-  disable-saving: false
-  disabled:
-  - minecraft:story/disabled
 stats:
   disable-saving: false
   forced-stats: {}
@@ -64,34 +64,21 @@ world-settings:
   default:
     verbose: true
     nerf-spawner-mobs: false
-    hanging-tick-frequency: 100
-    zombie-aggressive-towards-villager: true
     merge-radius:
       exp: 3.0
       item: 2.5
+    hanging-tick-frequency: 100
+    zombie-aggressive-towards-villager: true
     arrow-despawn-rate: 1200
-    wither-spawn-sound-radius: 0
-    max-tick-time:
-      tile: 50
-      entity: 50
-    max-tnt-per-tick: 100
-    hunger:
-      jump-walk-exhaustion: 0.05
-      jump-sprint-exhaustion: 0.2
-      combat-exhaustion: 0.1
-      regen-exhaustion: 6.0
-      swim-multiplier: 0.01
-      sprint-multiplier: 0.1
-      other-multiplier: 0.0
-    squid-spawn-range:
-      min: 45.0
+    item-despawn-rate: 6000
+    view-distance: 10
     mob-spawn-range: 4
-    entity-activation-range:
-      animals: 32
-      monsters: 32
-      misc: 16
-      water: 16
-      tick-inactive-villagers: true
+    entity-tracking-range:
+      players: 48
+      animals: 48
+      monsters: 48
+      misc: 32
+      other: 64
     growth:
       cactus-modifier: 100
       cane-modifier: 100
@@ -103,24 +90,37 @@ world-settings:
       netherwart-modifier: 100
       vine-modifier: 100
       cocoa-modifier: 100
-    entity-tracking-range:
-      players: 48
-      animals: 48
-      monsters: 48
-      misc: 32
-      other: 64
-    seed-village: 10387312
-    seed-feature: 14357617
-    seed-monument: 10387313
-    seed-slime: 987234911
-    save-structure-info: true
+    entity-activation-range:
+      animals: 32
+      monsters: 32
+      misc: 16
+      water: 16
+      tick-inactive-villagers: true
+    enable-zombie-pigmen-portal-spawns: true
+    wither-spawn-sound-radius: 0
+    dragon-death-sound-radius: 0
+    hunger:
+      jump-walk-exhaustion: 0.05
+      jump-sprint-exhaustion: 0.2
+      combat-exhaustion: 0.1
+      regen-exhaustion: 6.0
+      swim-multiplier: 0.01
+      sprint-multiplier: 0.1
+      other-multiplier: 0.0
     random-light-updates: false
+    save-structure-info: true
     ticks-per:
       hopper-transfer: 8
       hopper-check: 1
     hopper-amount: 1
-    dragon-death-sound-radius: 0
-    enable-zombie-pigmen-portal-spawns: true
-    item-despawn-rate: 6000
-    view-distance: 10
+    seed-village: 10387312
+    seed-feature: 14357617
+    seed-monument: 10387313
+    seed-slime: 987234911
+    max-tnt-per-tick: 100
+    max-tick-time:
+      tile: 50
+      entity: 50
+    squid-spawn-range:
+      min: 45.0
     max-entity-collisions: 8

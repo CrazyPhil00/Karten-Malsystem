@@ -1,12 +1,20 @@
 package me.sieben.malsystem.utils;
 
+import me.sieben.malsystem.MalSystem;
+import me.sieben.malsystem.commands.DesignCommand;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Canvas {
 
     public static ArrayList<String> canvasNames = new ArrayList<>();
+    public static HashMap<Player, Canvas> assignedPlayers = new HashMap<>();
+
 
     int[] canvasPosStart;
     int[] canvasPosEnd;
@@ -62,6 +70,50 @@ public class Canvas {
                 }
             }
         }
-        return null; //TODO No empty Canvas Error
+        return null; // TODO No empty Canvas Error
+    }
+
+    public static int getFreeCanvas(int size) {
+        int i = 0;
+        for (Canvas canvas : MalSystem.canvasList) {
+            if ((!canvas.isInUse()) && canvas.getWidth() == size) {
+                i ++;
+            }
+        }
+        return i;
+    }
+
+    public static boolean createCanvas(Player player, int width, int height) {
+        if (assignedPlayers.containsKey(player)) {
+            player.sendMessage(MalSystem.pluginPrefix + "You are already using a canvas.");
+            return false;
+        }
+        Canvas canvas = Canvas.getEmpty(MalSystem.canvasList, width, height);
+
+        if (canvas == null) {
+            player.sendMessage(MalSystem.pluginPrefix + "Error while Creating Canvas.");
+            return false;
+        }
+
+        assignedPlayers.put(player, canvas);
+
+        player.teleport(canvas.getTpPos());
+
+        DesignCommand.saveInv(player);
+        DesignCommand.giveColors(player);
+
+        return true;
+    }
+
+    public static Canvas getAssignedPlayer(Player player) {
+        return assignedPlayers.get(player);
+    }
+
+    public static boolean containsAssignedPlayer(Player player) {
+        return assignedPlayers.containsKey(player);
+    }
+
+    public static void removedAssignedPlayer(Player player) {
+        assignedPlayers.remove(player);
     }
 }

@@ -1,42 +1,43 @@
 
-canvas:
+
+plugin-prefix: "&8&l[&3Canvas&bMap&8&l] §r"
 
 
+npc:
+  select-canvas:
+    item-slot:
+      11:
+        name: "&1&lSmall Map"
 
+        lore-1: "&916*16 &7blocks"
+        lore-2: "&6%empty-canvas-amount% &7empty Canvases"
+        lore-3: ""
 
-  canvas_names:
-    - canvas_small
-    - canvas_medium
+        canvas-size: 16
 
-  canvas_small:
-    x_pos_1: 160
-    y_pos_1: 116
-    z_pos_1: -201
+      15:
+        name: "&5&lBig Map"
 
-    x_pos_2: 144
-    y_pos_2: 131
-    z_pos_2: -201
+        lore-1: "&d32*32 &7blocks"
+        lore-2: "&6%empty-canvas-amount% &7empty Canvases"
+        lore-3: ""
 
-    x_tp: 151
-    y_tp: 121
-    z_tp: -215
+        canvas-size: 32
 
-    width: 16
-    height : 16
+  save-canvas:
+    item-slot:
+      12:
+        material: "emerald"
+        name: "&2&lBuy"
 
-  canvas_medium:
+        lore-1: ""
+        lore-2: ""
+        lore-3: ""
 
-    x_pos_1: 297
-    y_pos_1: 163
-    z_pos_1: -252
+      14:
+        material: "barrier"
+        name: "&c&lExit"
 
-    x_pos_2: 144
-    y_pos_2: 195
-    z_pos_2: -252
-
-    x_tp: 313
-    y_tp: 181
-    z_tp: -276
-
-    width: 32
-    height: 32
+        lore-1: "&4Your Painting will not be saved!"
+        lore-2: ""
+        lore-3: ""

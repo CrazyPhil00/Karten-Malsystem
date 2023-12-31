@@ -7,6 +7,7 @@
 package me.sieben.malsystem.commands;
 
 import me.sieben.malsystem.MalSystem;
+import me.sieben.malsystem.gui.NPCGui;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -38,7 +39,7 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            player.sendMessage(MalSystem.pluginPrefix + "/help");
+            player.sendMessage(getHelp());
             return false;
         }
 
@@ -46,16 +47,20 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
             case ("spawn"):
             {
 
+                if (args.length < 3) {
+                    player.sendMessage(getHelp());
+                    return false;
+                }
 
                 Villager Npc = (Villager) player.getWorld().spawnEntity(player.getLocation(), EntityType.VILLAGER);
 
                 Npc.setCustomName(args[1].replaceAll("&", "§"));
-                setNPCMetadata(Npc, "npc-type", args[2]);
 
                 Npc.setAI(false);
                 Npc.setSilent(true);
                 Npc.setInvulnerable(true);
 
+                NPCGui.saveNPC(Npc, args[2]);
 
                 break;
             }
@@ -68,8 +73,7 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
 
                 for (Entity entity: entityList) {
                     if (entity.getType() == EntityType.VILLAGER) {
-                        if (getNPCMetadata(entity, "npc-type").toString().equalsIgnoreCase("SAVE-CANVAS") ||
-                                getNPCMetadata(entity, "npc-type").toString().equalsIgnoreCase("CREATE-CANVAS")) {
+                        if (NPCGui.npcConfig.isSet(entity.getUniqueId().toString())) {
                             entity.remove();
                             player.sendMessage(MalSystem.pluginPrefix + "Removed Entity " + entity.getCustomName());
                         }
@@ -79,21 +83,8 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
                 break;
             }
 
-            case ("status"):
-            {
-                Collection<Entity> entityList = player.getWorld().getNearbyEntities(
-                        player.getLocation(),
-                        4, 4, 4);
-
-                for (Entity entity: entityList) {
-                    if (entity.getType() == EntityType.VILLAGER) {
-                        if (entity.getCustomName().startsWith("CANVAS-NPC-")) {
-                            player.sendMessage(MalSystem.pluginPrefix + entity.getCustomName() + ":");
-                            player.sendMessage("Name Visible: " + entity.isCustomNameVisible());
-                            player.sendMessage("Invulnerable: " + entity.isInvulnerable());
-                        }
-                    }
-                }
+            case ("help"): {
+                player.sendMessage(getHelp());
             }
         }
 
@@ -102,17 +93,14 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
     }
 
 
-    public static void setNPCMetadata(Entity npc, String key, Object value) {
-        npc.setMetadata(key, new FixedMetadataValue(MalSystem.getInstance(), value));
-    }
-
-    public static Object getNPCMetadata(Entity npc, String key) {
-        for (MetadataValue meta : npc.getMetadata(key)) {
-            if (meta.getOwningPlugin() == MalSystem.getInstance()) {
-                return meta.value();
-            }
-        }
-        return null;
+    private String getHelp() {
+        return
+                MalSystem.pluginPrefix + "§8§l------§9Help§8§l------\n" +
+                MalSystem.pluginPrefix + "/canvas-npc §aspawn §d§oname §b§onpc-type §f:\n" +
+                MalSystem.pluginPrefix + "Spawns a NPC at the executing Players position\n" +
+                MalSystem.pluginPrefix + "- npc-type: §aCREATE-CANVAS§7/§6SAVE-CANVAS\n" +
+                MalSystem.pluginPrefix + "/canvas-npc §cremove §f: \n\n" +
+                MalSystem.pluginPrefix + "Removes all Canvas NPC's in a 4 block radius\n";
     }
 
     @Override

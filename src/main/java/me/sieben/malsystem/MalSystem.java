@@ -3,6 +3,7 @@ package me.sieben.malsystem;
 import me.sieben.malsystem.commands.CreateCanvas;
 import me.sieben.malsystem.commands.DesignCommand;
 import me.sieben.malsystem.commands.NPCCommand;
+import me.sieben.malsystem.gui.NPCGui;
 import me.sieben.malsystem.listeners.DesignListener;
 import me.sieben.malsystem.listeners.NpcListener;
 import me.sieben.malsystem.renderer.CanvasRenderer;
@@ -13,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,6 +57,7 @@ public final class MalSystem extends JavaPlugin {
         if (loadCanvases()) System.out.println(pluginPrefix + "Successfully loaded Canvases");
         else System.out.println(pluginPrefix + "Error while loading Canvases");
 
+
         getCommand("canvas-npc").setExecutor(new NPCCommand());
         getCommand("canvas-npc").setTabCompleter(new NPCCommand());
 
@@ -66,6 +69,8 @@ public final class MalSystem extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new DesignListener(), this);
         Bukkit.getPluginManager().registerEvents(new NpcListener(), this);
+
+        NPCGui.saveNPC(null, null);
 
 
     }
@@ -148,6 +153,9 @@ public final class MalSystem extends JavaPlugin {
 
 
         File dir = new File("plugins/CanvasMap/images");
+        if (!(dir.exists())) {
+            dir.mkdirs();
+        }
 
         for (File file : dir.listFiles()) {
             if (file.getName().endsWith(".yml")) {
@@ -169,8 +177,9 @@ public final class MalSystem extends JavaPlugin {
         }
 
         return true;
-
     }
+
+
 
 
     public static MalSystem getInstance() {

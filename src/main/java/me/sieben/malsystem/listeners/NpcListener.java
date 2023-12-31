@@ -1,5 +1,6 @@
 package me.sieben.malsystem.listeners;
 
+import me.sieben.malsystem.MalSystem;
 import me.sieben.malsystem.commands.DesignCommand;
 import me.sieben.malsystem.commands.NPCCommand;
 import me.sieben.malsystem.gui.NPCGui;
@@ -13,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import sun.security.krb5.internal.crypto.Des;
 
@@ -24,16 +26,12 @@ public class NpcListener implements Listener {
             Player player = event.getPlayer();
             Entity npc = event.getRightClicked();
 
-            if (npc.getCustomName() == null) return;
+            if (!(NPCGui.npcConfig.isSet(npc.getUniqueId().toString()))) return;
 
-
-
-            if (NPCCommand.getNPCMetadata(npc, "npc-type").equals("CREATE-CANVAS")) {
+            if (NPCGui.npcConfig.getString(npc.getUniqueId().toString()).equalsIgnoreCase("CREATE-CANVAS")) {
                 event.setCancelled(true);
                 new NPCGui().openGuiCreateMap(player);
-            }
-
-            else if (NPCCommand.getNPCMetadata(npc, "npc-type").equals("SAVE-CANVAS")) {
+            } else if (NPCGui.npcConfig.getString(npc.getUniqueId().toString()).equalsIgnoreCase("SAVE-CANVAS")) {
                 event.setCancelled(true);
                 new NPCGui().openGuiSaveMap(player);
             }
@@ -55,18 +53,18 @@ public class NpcListener implements Listener {
 
             Canvas.createCanvas(player, size, size);
 
-        }else if (event.getClickedInventory().getName().equalsIgnoreCase("      §8§kk§r §2§lBuy §7or §c§lExit §8§kk")) {
+        } else if (event.getClickedInventory().getName().equalsIgnoreCase("      §8§kk§r §2§lBuy §7or §c§lExit §8§kk")) {
             event.setCancelled(true);
 
             if (itemStack.getType() == Material.EMERALD) {
 
                 DesignCommand.saveMap(player);
 
-            }else if (itemStack.getType() == Material.BARRIER) {
+            } else if (itemStack.getType() == Material.BARRIER) {
                 new NPCGui().confirmExit(player);
             }
 
-        }else if (event.getClickedInventory().getName().equalsIgnoreCase("      §8§kk§r §c§lConfirm Exit §8§kk")) {
+        } else if (event.getClickedInventory().getName().equalsIgnoreCase("      §8§kk§r §c§lConfirm Exit §8§kk")) {
             event.setCancelled(true);
             DesignCommand.exitMap(player);
             player.closeInventory();
@@ -77,6 +75,6 @@ public class NpcListener implements Listener {
                 event.setCancelled(true);
             }
         }
-
     }
+
 }

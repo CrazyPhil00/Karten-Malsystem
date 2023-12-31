@@ -1,23 +1,32 @@
 package me.sieben.malsystem.gui;
 
+import com.sun.org.apache.xpath.internal.axes.FilterExprWalker;
 import me.sieben.malsystem.MalSystem;
+import me.sieben.malsystem.commands.NPCCommand;
 import me.sieben.malsystem.utils.Canvas;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NPCGui {
 
     private FileConfiguration config = MalSystem.getInstance().getConfig();
+    private static ArrayList<Villager> NPCList = new ArrayList<>();
 
     public void openGuiCreateMap(Player player) {
 
@@ -130,5 +139,30 @@ public class NPCGui {
 
         inventory.setItem(13, stack);
         player.openInventory(inventory);
+    }
+
+    public static File npcFile = new File("plugins/CanvasMap/npc.yml");
+    public static FileConfiguration npcConfig = YamlConfiguration.loadConfiguration(npcFile);
+
+    public static void saveNPC(Entity entity, String npcType) {
+
+        if (!(npcFile.exists())) {
+            try {
+                npcFile.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (entity == null) return;
+
+        npcConfig.set(entity.getUniqueId().toString(), npcType);
+
+        try {
+            npcConfig.save(npcFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

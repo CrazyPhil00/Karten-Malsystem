@@ -55,4 +55,4 @@ NPC löschen:
         save-canvas: NPC der das inventart zum Kauf der Map öffnet
         item-slot: Ist der Item-slot eines Items im NPC Inventar
 <img src="https://proxy.spigotmc.org/cb7b065c27a6e19884eb8570db0767c1036836bb?url=https%3A%2F%2Fwiki.vg%2Fimages%2Fthumb%2F1%2F19%2FChest-slots.png%2F300px-Chest-slots.png" width="30%">
-<img src="https://www.spigotmc.org/attachments/example2-png.188806/" width="40%">
+<img src="https://www.spigotmc.org/attachments/example2-png.188806/" width="35%">

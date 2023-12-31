@@ -53,6 +53,22 @@ NPC löschen:
     npc:
         select-canvas: NPC der das Inventar zum erstellen einer Map öffnet
         save-canvas: NPC der das inventart zum Kauf der Map öffnet
-        item-slot: Ist der Item-slot eines Items im NPC Inventar
+            item-slot: Ist der Item-slot eines Items im NPC Inventar
+                name: Name des Items im NPC Inventar
+                lore-1/3: Loren der Items im NPC Inventar
+                price: Preis der Karte
+                canvas-size: Größe der Karte
+                material: Material des Items im save-canvas Inventart (WICHTIG!: Item name MUSS groß geschrieben werden)
+
 <img src="https://proxy.spigotmc.org/cb7b065c27a6e19884eb8570db0767c1036836bb?url=https%3A%2F%2Fwiki.vg%2Fimages%2Fthumb%2F1%2F19%2FChest-slots.png%2F300px-Chest-slots.png" width="30%">
 <img src="https://www.spigotmc.org/attachments/example2-png.188806/" width="35%">
+
+---
+
+<h2>Zusätzliche Informationen:</h2>
+
+Dateigröße der gespeicherten Karten:
+
+    16 * 16 blöcke = 11kb
+    32 * 32 blöcke = 42kb
+    128 * 128 blöcke = 696kb

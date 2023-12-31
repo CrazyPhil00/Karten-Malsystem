@@ -45,6 +45,13 @@ public final class MalSystem extends JavaPlugin {
 
         pluginPrefix = getConfig().getString("plugin-prefix").replaceAll("&", "§");
 
+
+        if (!(getServer().getPluginManager().isPluginEnabled("BankSystem"))) {
+            System.out.println(pluginPrefix + "Could not Find Plugin API BankSystem!");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         if (loadCanvases()) System.out.println(pluginPrefix + "Successfully loaded Canvases");
         else System.out.println(pluginPrefix + "Error while loading Canvases");
 
@@ -106,7 +113,10 @@ public final class MalSystem extends JavaPlugin {
         }
 
 
-        if (!(canvasConfig.isSet("canvas.canvas_names"))) return false;
+        if (!(canvasConfig.isSet("canvas.canvas_names"))) {
+            System.out.println(pluginPrefix + "No Canvases to load!");
+            return true;
+        }
 
         for (String s : canvasConfig.getStringList("canvas.canvas_names")) {
 

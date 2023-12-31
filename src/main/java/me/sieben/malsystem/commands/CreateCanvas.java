@@ -139,6 +139,10 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
 
                 player.sendMessage(MalSystem.pluginPrefix + "Deleted Canvas " + canvasName);
 
+                if (MalSystem.getInstance().loadCanvases()) {
+                    player.sendMessage(MalSystem.pluginPrefix + "Reloaded all Canvases!");
+                }else player.sendMessage(MalSystem.pluginPrefix + "Error loading Canvases");
+
                 break;
             }
 

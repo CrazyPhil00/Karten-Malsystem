@@ -67,7 +67,7 @@ NPC löschen:
 
 <h2>Zusätzliche Informationen:</h2>
 
-Dateigröße der gespeicherten Karten:
+Dateigröße der gespeicherten Karten (plugins/CanvasMap/img/):
 
     16 * 16 blöcke = 11kb
     32 * 32 blöcke = 42kb

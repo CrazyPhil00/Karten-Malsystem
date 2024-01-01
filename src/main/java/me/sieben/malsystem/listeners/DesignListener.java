@@ -20,6 +20,7 @@ public class DesignListener implements Listener {
 
     private final ArrayList<Player> confirmReset = new ArrayList<>();
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onBlockClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -67,6 +68,7 @@ public class DesignListener implements Listener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static void resetCanvas(Player player) {
         Canvas canvas = Canvas.getAssignedPlayer(player);
 

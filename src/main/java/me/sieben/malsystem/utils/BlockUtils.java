@@ -51,6 +51,7 @@ public class BlockUtils {
                 .collect(Collectors.toList());
     }
 
+    @SuppressWarnings("deprecation")
     public static List<BlockUtils> convertTo2DList(List<Block> blockList, int size) {
         int minX = blockList.stream().mapToInt(Block::getX).min().orElse(0);
         int minY = blockList.stream().mapToInt(Block::getY).min().orElse(0);

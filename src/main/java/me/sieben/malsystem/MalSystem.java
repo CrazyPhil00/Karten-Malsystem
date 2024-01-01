@@ -82,6 +82,7 @@ public final class MalSystem extends JavaPlugin {
     }
 
 
+    @SuppressWarnings("deprecation")
     public boolean loadCanvases() {
 
         canvasConfigFile = new File("plugins/CanvasMap/canvas.yml");

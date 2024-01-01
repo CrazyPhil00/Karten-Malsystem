@@ -16,7 +16,7 @@ import org.bukkit.map.MapView;
 import java.util.HashMap;
 import java.util.List;
 
-
+@SuppressWarnings("deprecation")
 public class CanvasUtils {
 
 

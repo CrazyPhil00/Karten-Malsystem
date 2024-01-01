@@ -1,7 +1,7 @@
 package me.sieben.malsystem;
 
 import me.sieben.malsystem.commands.CreateCanvas;
-import me.sieben.malsystem.commands.DesignCommand;
+import me.sieben.malsystem.commands.MapCommand;
 import me.sieben.malsystem.commands.NPCCommand;
 import me.sieben.malsystem.gui.NPCGui;
 import me.sieben.malsystem.listeners.DesignListener;
@@ -14,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,19 +48,20 @@ public final class MalSystem extends JavaPlugin {
 
 
         if (!(getServer().getPluginManager().isPluginEnabled("BankSystem"))) {
-            System.out.println(pluginPrefix + "Could not Find Plugin API BankSystem!");
+            System.out.println(pluginPrefix + "§cCould not Find Plugin API BankSystem!");
+            System.out.println(pluginPrefix + "§cPlease check if the Plugin exists or works correctly!");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
         if (loadCanvases()) System.out.println(pluginPrefix + "Successfully loaded Canvases");
-        else System.out.println(pluginPrefix + "Error while loading Canvases");
+        else System.out.println(pluginPrefix + "§cError while loading Canvases");
 
 
         getCommand("canvas-npc").setExecutor(new NPCCommand());
         getCommand("canvas-npc").setTabCompleter(new NPCCommand());
 
-        getCommand("design").setExecutor(new DesignCommand());
+        getCommand("canvas-map").setExecutor(new MapCommand());
 
         getCommand("canvas").setExecutor(new CreateCanvas());
         getCommand("canvas").setTabCompleter(new CreateCanvas());

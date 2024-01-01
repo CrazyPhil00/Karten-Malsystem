@@ -8,19 +8,14 @@ package me.sieben.malsystem.commands;
 
 import me.sieben.malsystem.MalSystem;
 import me.sieben.malsystem.gui.NPCGui;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,11 +27,17 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MalSystem.pluginPrefix + "Only Player can perform this command!");
+            sender.sendMessage(MalSystem.pluginPrefix + "Only Players can perform this Command!");
             return false;
         }
 
         Player player = (Player) sender;
+
+        if (!(player.hasPermission(MalSystem.getInstance().getConfig().getString("permission.modify-npc"))))
+        {
+            player.sendMessage(MalSystem.pluginPrefix + "You don't have the permission to perform that command");
+            return false;
+        }
 
         if (args.length == 0) {
             player.sendMessage(getHelp());
@@ -49,6 +50,11 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
 
                 if (args.length < 3) {
                     player.sendMessage(getHelp());
+                    return false;
+                }
+
+                if (!(args[2].equalsIgnoreCase("CREATE-CANVAS") || args[2].equalsIgnoreCase("SAVE-CANVAS"))) {
+                    player.sendMessage(MalSystem.pluginPrefix + "Please use a provided canvas type.");
                     return false;
                 }
 
@@ -83,7 +89,8 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
                 break;
             }
 
-            case ("help"): {
+            default:
+            {
                 player.sendMessage(getHelp());
             }
         }
@@ -95,11 +102,11 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
 
     private String getHelp() {
         return
-                MalSystem.pluginPrefix + "§8§l------§9Help§8§l------\n" +
-                MalSystem.pluginPrefix + "/canvas-npc §aspawn §d§oname §b§onpc-type §f:\n" +
+                MalSystem.pluginPrefix + "§8§l------------§9Help§8§l-----------\n" +
+                MalSystem.pluginPrefix + "/canvas-npc spawn name npc-type:\n" +
                 MalSystem.pluginPrefix + "Spawns a NPC at the executing Players position\n" +
-                MalSystem.pluginPrefix + "- npc-type: §aCREATE-CANVAS§7/§6SAVE-CANVAS\n" +
-                MalSystem.pluginPrefix + "/canvas-npc §cremove §f: \n\n" +
+                MalSystem.pluginPrefix + "§8--------------------------------------\n" +
+                MalSystem.pluginPrefix + "/canvas-npc remove: \n\n" +
                 MalSystem.pluginPrefix + "Removes all Canvas NPC's in a 4 block radius\n";
     }
 
@@ -111,13 +118,12 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
             return completions;
         }
 
-        Player player = (Player) sender;
-
         if (args.length == 1) {
             // First argument completion
             completions.add("spawn");
             completions.add("remove");
             completions.add("status");
+            completions.add("help");
         } else if (args.length == 3 && args[0].equalsIgnoreCase("spawn")) {
             // Second argument completion for the 'spawn' command
             // You can add more options based on your requirements

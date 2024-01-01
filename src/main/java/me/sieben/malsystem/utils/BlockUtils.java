@@ -1,4 +1,5 @@
 package me.sieben.malsystem.utils;
+
 import me.sieben.malsystem.MalSystem;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -6,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;

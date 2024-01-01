@@ -10,7 +10,7 @@
 package me.sieben.malsystem.listeners;
 
 import me.sieben.malsystem.MalSystem;
-import me.sieben.malsystem.commands.DesignCommand;
+import me.sieben.malsystem.utils.CanvasUtils;
 import me.sieben.malsystem.utils.BlockUtils;
 import me.sieben.malsystem.utils.Canvas;
 import org.bukkit.DyeColor;
@@ -51,23 +51,8 @@ public class DesignListener implements Listener {
         } else if (event.getMaterial() == Material.BARRIER) {
             if (confirmReset.contains(player)) {
                 event.setCancelled(true);
-                Canvas canvas = Canvas.getAssignedPlayer(player);
 
-                int[] posStart = canvas.getCanvasPosStart();
-                int[] posEnd = canvas.getCanvasPosEnd();
-
-                List<Block> blockList = BlockUtils.generateBlocks(
-                        player.getWorld(),
-                        posStart[0],
-                        posStart[1],
-                        posStart[2],
-                        posEnd[0],
-                        posEnd[1],
-                        posEnd[2]);
-
-                for (Block b : blockList) {
-                    b.setData(DyeColor.WHITE.getWoolData());
-                }
+                resetCanvas(player);
                 player.sendMessage(MalSystem.pluginPrefix + "Canvas has been reset.");
 
                 confirmReset.remove(player);
@@ -87,7 +72,27 @@ public class DesignListener implements Listener {
         if (Canvas.containsAssignedPlayer(player)) {
             Canvas.removeAssignedPlayer(player);
 
-            DesignCommand.loadInv(player);
+            CanvasUtils.loadInv(player);
+        }
+    }
+
+    public static void resetCanvas(Player player) {
+        Canvas canvas = Canvas.getAssignedPlayer(player);
+
+        int[] posStart = canvas.getCanvasPosStart();
+        int[] posEnd = canvas.getCanvasPosEnd();
+
+        List<Block> blockList = BlockUtils.generateBlocks(
+                player.getWorld(),
+                posStart[0],
+                posStart[1],
+                posStart[2],
+                posEnd[0],
+                posEnd[1],
+                posEnd[2]);
+
+        for (Block b : blockList) {
+            b.setData(DyeColor.WHITE.getWoolData());
         }
     }
 }

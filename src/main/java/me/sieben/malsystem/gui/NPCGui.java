@@ -1,13 +1,9 @@
 package me.sieben.malsystem.gui;
 
-import com.sun.org.apache.xpath.internal.axes.FilterExprWalker;
 import me.sieben.malsystem.MalSystem;
-import me.sieben.malsystem.commands.NPCCommand;
 import me.sieben.malsystem.utils.Canvas;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -80,7 +76,7 @@ public class NPCGui {
     public void openGuiSaveMap(Player player) {
 
         Inventory inventory = Bukkit.createInventory(null, InventoryType.CHEST,
-                "      §8§kk§r §2§lBuy §7or §c§lExit §8§kk");
+                "         §8§kk§r §2§lBuy §7or §c§lExit §8§kk");
 
         String config_path = "npc.save-canvas.item-slot.";
 
@@ -123,7 +119,7 @@ public class NPCGui {
 
     public void confirmExit(Player player) {
         Inventory inventory = Bukkit.createInventory(null, InventoryType.CHEST,
-                "      §8§kk§r §c§lConfirm Exit §8§kk");
+                "         §8§kk§r §c§lConfirm Exit §8§kk");
 
         ItemStack stack = new ItemStack(Material.BARRIER);
         ItemMeta meta = stack.getItemMeta();

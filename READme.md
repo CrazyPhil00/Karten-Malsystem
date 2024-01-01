@@ -9,7 +9,7 @@ Eine Leinwand erstellen:
 
     - name: Name der zu erstellenden Leinwand.
     - x1/y1/z1: Anfangs-Coordinaten der Leinwand
-    - x2/y2/z2: End-Coordinatedn der Leinwand
+    - x2/y2/z2: End-Coordinaten der Leinwand
     - height/width: Breite/Höhe der Leinwand (müssen die gleichen Werte sein)
     
     Wichtig!: Beim erstellen einer Leinwand wird die Position des ausführenden Spielers als Leinwand-Spawnpunkt benutzt.
@@ -35,7 +35,7 @@ NPC erstellen:
     - name: Sichtbarer Name des NPC's (Kann farb codes beinhalten z.B. &c)
     - npc-type: 
             - CREATE-CANVAS: NPC der das Inventar zum erstellen einer Map öffnet
-            - SAVE-CANVAS: NPC der das inventart zum Kauf der Map öffnet
+            - SAVE-CANVAS: NPC der das inventar zum Kauf der Map öffnet
 
 NPC löschen:
 

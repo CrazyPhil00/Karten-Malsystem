@@ -20,7 +20,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,24 +29,22 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MalSystem.pluginPrefix + "You are not a Player");
+            sender.sendMessage(MalSystem.pluginPrefix + "Only Players can perform this Command!");
             return false;
         }
 
         Player player = (Player) sender;
 
-        /* TODO
-        if (!(player.hasPermission(new MalSystem().getConfig().get("permission.create_canvas").toString())))
+
+        if (!(player.hasPermission(MalSystem.getInstance().getConfig().getString("permission.modify-canvas"))))
         {
-            player.sendMessage("You don't have the permission to perform that command");
+            player.sendMessage(MalSystem.pluginPrefix + "You don't have the permission to perform that command");
             return false;
         }
-        */
-
 
         if (args.length == 0)
         {
-            player.sendMessage(MalSystem.pluginPrefix + "/help");
+            player.sendMessage(getHelp());
             return false;
         }
 
@@ -58,22 +55,31 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             {
 
                 if (args.length != 10) {
-                    player.sendMessage(MalSystem.pluginPrefix + "/usage");
+                    player.sendMessage(getHelp());
                     return false;
                 }
 
                 String canvasName = args[1];
 
-                int posX1 = Integer.parseInt(args[2]);
-                int posY1 = Integer.parseInt(args[3]);
-                int posZ1 = Integer.parseInt(args[4]);
+                int posX1, posY1, posZ1, posX2, posY2, posZ2, width, height;
 
-                int posX2 = Integer.parseInt(args[5]);
-                int posY2 = Integer.parseInt(args[6]);
-                int posZ2 = Integer.parseInt(args[7]);
+                try {
+                    posX1 = Integer.parseInt(args[2]);
+                    posY1 = Integer.parseInt(args[3]);
+                    posZ1 = Integer.parseInt(args[4]);
 
-                int width = Integer.parseInt(args[8]);
-                int height = Integer.parseInt(args[9]);
+                    posX2 = Integer.parseInt(args[5]);
+                    posY2 = Integer.parseInt(args[6]);
+                    posZ2 = Integer.parseInt(args[7]);
+
+                    width = Integer.parseInt(args[8]);
+                    height = Integer.parseInt(args[9]);
+                }catch (NumberFormatException e) {
+                    player.sendMessage(MalSystem.pluginPrefix + "Please enter valid values.");
+                    return false;
+                }
+
+
 
                 FileConfiguration config = MalSystem.getInstance().canvasConfig;
                 File configFile = MalSystem.getInstance().canvasConfigFile;
@@ -112,10 +118,10 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             }
 
 
-            case ("delete"):
+            case ("remove"):
             {
-                if (!(args.length == 2)) {
-                    player.sendMessage(MalSystem.pluginPrefix + "/usage");
+                if (args.length != 2) {
+                    player.sendMessage(getHelp());
                     return false;
                 }
 
@@ -125,10 +131,15 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
                 File configFile = MalSystem.getInstance().canvasConfigFile;
 
                 List<String> names = config.getStringList("canvas.canvas_names");
+
+                if (!names.contains(canvasName)) {
+                    player.sendMessage(MalSystem.pluginPrefix + canvasName + " doesn't exist!");
+                    return false;
+                }
+
                 names.remove(canvasName);
 
                 config.set("canvas.canvas_names", names);
-
                 config.set("canvas." + canvasName, "");
 
                 try {
@@ -160,7 +171,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             default:
             {
 
-                player.sendMessage(MalSystem.pluginPrefix + "/help");
+                player.sendMessage(getHelp());
 
             }
 
@@ -168,6 +179,16 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
 
 
         return false;
+    }
+
+    private String getHelp() {
+        return
+                MalSystem.pluginPrefix +         "§8§l------------§9Help§8§l-----------\n" +
+                        MalSystem.pluginPrefix + "/canvas create name x1 y1 z1 x2 y2 z2 width height:\n" +
+                        MalSystem.pluginPrefix + "Creates a new Canvas with the entered values.\n" +
+                        MalSystem.pluginPrefix + "§8--------------------------------------\n" +
+                        MalSystem.pluginPrefix + "/canvas remove name: \n\n" +
+                        MalSystem.pluginPrefix + "Deletes the selected Canvas\n";
     }
 
 
@@ -181,7 +202,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
 
         if (args.length == 1) {
             // Tab complete the first argument (subcommands)
-            List<String> subcommands = Arrays.asList("create", "delete", "reload");
+            List<String> subcommands = Arrays.asList("create", "delete", "reload", "help");
             return filterStartingWith(args[0], subcommands);
         } else if (args.length >= 2 && args.length <= 10) {
             // Tab complete the arguments based on the first argument
@@ -234,5 +255,6 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
         // For now, returning an empty list as a placeholder
         return Canvas.canvasNames;
     }
+
 
 }

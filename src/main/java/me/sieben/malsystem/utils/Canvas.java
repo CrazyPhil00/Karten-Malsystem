@@ -1,7 +1,6 @@
 package me.sieben.malsystem.utils;
 
 import me.sieben.malsystem.MalSystem;
-import me.sieben.malsystem.commands.DesignCommand;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -12,7 +11,7 @@ public class Canvas {
 
     public static ArrayList<String> canvasNames = new ArrayList<>();
     public static HashMap<Player, Canvas> assignedPlayers = new HashMap<>();
-
+    public static HashMap<Player, Location> oldPlayerPos = new HashMap<>();
 
     int[] canvasPosStart;
     int[] canvasPosEnd;
@@ -95,10 +94,11 @@ public class Canvas {
 
         assignedPlayers.put(player, canvas);
 
+        oldPlayerPos.put(player, player.getLocation());
         player.teleport(canvas.getTpPos());
 
-        DesignCommand.saveInv(player);
-        DesignCommand.giveColors(player);
+        CanvasUtils.saveInv(player);
+        CanvasUtils.giveColors(player);
 
         return true;
     }

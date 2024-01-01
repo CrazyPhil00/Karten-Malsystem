@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="BankSystem">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/Server/plugins/BankSystem-2.0NEWEST.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Server/plugins/BankSystem.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

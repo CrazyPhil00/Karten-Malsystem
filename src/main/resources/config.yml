@@ -2,6 +2,11 @@
 
 plugin-prefix: "&8&l[&3Canvas&bMap&8&l] §r"
 
+permission:
+  modify-canvas: "modify-canvas"
+  modify-npc: "modify-npc"
+  give-map: "give-map"
+
 
 npc:
   select-canvas:

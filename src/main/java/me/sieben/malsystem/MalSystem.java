@@ -96,7 +96,6 @@ public final class MalSystem extends JavaPlugin {
             }
 
             try (FileWriter writer = new FileWriter("plugins/CanvasMap/canvas.yml")) {
-                // Manually add comments as strings in the YAML file
                 writer.write("#\n" +
                         "#Supported Canvas sizes: 2, 4, 8, 16, 32, 64, 128\n" +
                         "# Canvas File size (The file size of the images that are being saved):\n" +

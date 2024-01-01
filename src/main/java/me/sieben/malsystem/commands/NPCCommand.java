@@ -1,9 +1,3 @@
-/**
- * TODO
- * - permission check
- *
- */
-
 package me.sieben.malsystem.commands;
 
 import me.sieben.malsystem.MalSystem;
@@ -119,19 +113,14 @@ public class NPCCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 1) {
-            // First argument completion
             completions.add("spawn");
             completions.add("remove");
             completions.add("status");
             completions.add("help");
         } else if (args.length == 3 && args[0].equalsIgnoreCase("spawn")) {
-            // Second argument completion for the 'spawn' command
-            // You can add more options based on your requirements
             completions.add("SAVE-CANVAS");
             completions.add("CREATE-CANVAS");
         }
-
-        // Add more completions for additional arguments as needed
 
         return completions;
     }

@@ -1,5 +1,3 @@
-
-
 package me.sieben.malsystem.utils;
 
 import de.infinitycity.banksystem.apis.buy.BuyAPI;

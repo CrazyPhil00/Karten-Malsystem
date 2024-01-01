@@ -1,11 +1,3 @@
-/**
- *
- * TODO
- * - usage
- * - tab complete
- */
-
-
 package me.sieben.malsystem.commands;
 
 import me.sieben.malsystem.MalSystem;
@@ -196,17 +188,15 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (!(sender instanceof Player)) {
-            return null; // Tab completion only works for players
+            return null;
         }
 
         Player player = (Player) sender;
 
         if (args.length == 1) {
-            // Tab complete the first argument (subcommands)
             List<String> subcommands = Arrays.asList("create", "delete", "reload", "help");
             return filterStartingWith(args[0], subcommands);
         } else if (args.length >= 2 && args.length <= 10) {
-            // Tab complete the arguments based on the first argument
             switch (args[0]) {
                 case "create":
                     return tabCompleteCreateArguments(args, player);
@@ -215,7 +205,7 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             }
         }
 
-        return null; // Default to no tab completion
+        return null;
     }
 
     private List<String> filterStartingWith(String prefix, List<String> options) {
@@ -226,10 +216,8 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
 
     private List<String> tabCompleteCreateArguments(String[] args, Player player) {
         if (args.length == 2) {
-            // Tab complete the canvas name
             return filterStartingWith(args[1], getCanvasNames());
         } else if (args.length >= 3 && args.length <= 8) {
-            // Tab complete the position arguments with the block positions the player is looking at
             Location targetBlockLocation = player.getTargetBlock(null, 5).getLocation();
             int targetBlockX = targetBlockLocation.getBlockX();
             int targetBlockY = targetBlockLocation.getBlockY();
@@ -252,8 +240,6 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
     }
 
     private List<String> getCanvasNames() {
-        // Replace with your logic to retrieve canvas names from your configuration
-        // For now, returning an empty list as a placeholder
         return Canvas.canvasNames;
     }
 

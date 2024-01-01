@@ -16,7 +16,7 @@ Eine Leinwand erstellen:
     
 Eine Leinwand löschen:
     
-    /canvas delete name
+    /canvas remove name
 
     - name: Name des zu löschender Leinwand
 
@@ -24,7 +24,7 @@ Leinwände reloaden:
 
     /canvas reload
     
-    Läd alle Leinwände die in der Config gespeichert sind neu
+    Läd alle Leinwände die in der Config gespeichert sind neu.
 
 ---
 
@@ -45,6 +45,17 @@ NPC löschen:
 
 ---
 
+Karte wiederherstellen:
+    
+    /canvas-map player id
+
+    - player: Der Spieler der die Karte erhält
+    - id: ID der Karte die wiederhergestellt wird.
+    
+    Wichtig!: Es können nur karten wiederhergestellt werden die in 'plugins/CanvasMap/img' gespeichert wurden.
+
+---
+
 <h2>Config</h2>
 
     plugin-prefix: Prefix der vor jeder Nachricht steht die das Plugin sendet (Kann mit farb codes verwendet werden)
@@ -61,7 +72,7 @@ NPC löschen:
                 material: Material des Items im save-canvas Inventart (WICHTIG!: Item name MUSS groß geschrieben werden)
 
 <img src="https://proxy.spigotmc.org/cb7b065c27a6e19884eb8570db0767c1036836bb?url=https%3A%2F%2Fwiki.vg%2Fimages%2Fthumb%2F1%2F19%2FChest-slots.png%2F300px-Chest-slots.png" width="30%">
-<img src="https://www.spigotmc.org/attachments/example2-png.188806/" width="35%">
+<img src="https://www.spigotmc.org/attachments/example2-png.188806/" width="40%">
 
 ---
 

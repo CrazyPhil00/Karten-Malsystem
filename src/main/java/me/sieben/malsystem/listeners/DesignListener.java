@@ -1,18 +1,9 @@
-/**
- * TODO
- *
- * - Confirm Reset
- *
- */
-
-
-
 package me.sieben.malsystem.listeners;
 
 import me.sieben.malsystem.MalSystem;
-import me.sieben.malsystem.utils.CanvasUtils;
 import me.sieben.malsystem.utils.BlockUtils;
 import me.sieben.malsystem.utils.Canvas;
+import me.sieben.malsystem.utils.CanvasUtils;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,13 +13,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DesignListener implements Listener {
 
-    private ArrayList<Player> confirmReset = new ArrayList<>();
+    private final ArrayList<Player> confirmReset = new ArrayList<>();
 
     @EventHandler
     public void onBlockClick(PlayerInteractEvent event) {
@@ -46,6 +36,7 @@ public class DesignListener implements Listener {
 
             byte color = event.getItem().getData().getData();
 
+            assert block != null;
             block.setData(DyeColor.getByDyeData(color).getWoolData());
 
         } else if (event.getMaterial() == Material.BARRIER) {

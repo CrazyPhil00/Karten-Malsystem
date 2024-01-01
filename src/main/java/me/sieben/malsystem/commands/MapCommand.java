@@ -37,48 +37,39 @@ public class MapCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        switch (args[0])
-        {
-            case ("give"): {
-
-                if (args.length < 3) {
-                    player.sendMessage(getHelp());
-                    return false;
-                }
-
-                Player target = Bukkit.getPlayer(args[1]);
-
-                int mapId = 0;
-
-                try {
-                    mapId = Integer.parseInt(args[2]);
-                } catch (NumberFormatException e) {
-                    player.sendMessage(MalSystem.pluginPrefix + args[2] + " is not a number!");
-                    return false;
-                }
-
-                if (target == null) {
-                    player.sendMessage(MalSystem.pluginPrefix + "Player " + args[1] + " isn't Online!");
-                    return false;
-                }
-
-
-                ItemStack map = new ItemStack(Material.MAP, 1, (short) mapId);
-                MapMeta meta = (MapMeta) map.getItemMeta();
-                meta.setDisplayName(ChatColor.DARK_GRAY + "Map of " + ChatColor.BLUE + "" + ChatColor.BOLD + target.getName());
-                meta.setLocalizedName(String.valueOf(mapId));
-                map.setItemMeta(meta);
-
-                target.getInventory().addItem(map);
-
-                break;
-            }
-
-            default:
-            {
+        if (args[0].equals("give")) {
+            if (args.length < 3) {
                 player.sendMessage(getHelp());
+                return false;
             }
 
+            Player target = Bukkit.getPlayer(args[1]);
+
+            int mapId;
+
+            try {
+                mapId = Integer.parseInt(args[2]);
+            } catch (NumberFormatException e) {
+                player.sendMessage(MalSystem.pluginPrefix + args[2] + " is not a number!");
+                return false;
+            }
+
+            if (target == null) {
+                player.sendMessage(MalSystem.pluginPrefix + "Player " + args[1] + " isn't Online!");
+                return false;
+            }
+
+
+            ItemStack map = new ItemStack(Material.MAP, 1, (short) mapId);
+            MapMeta meta = (MapMeta) map.getItemMeta();
+            meta.setDisplayName(ChatColor.DARK_GRAY + "Map of " + ChatColor.BLUE + "" + ChatColor.BOLD + target.getName());
+            meta.setLocalizedName(String.valueOf(mapId));
+            map.setItemMeta(meta);
+
+            target.getInventory().addItem(map);
+
+        } else {
+            player.sendMessage(getHelp());
         }
 
         return false;

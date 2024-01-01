@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -237,13 +238,13 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
             switch (args.length) {
                 case 3:
                 case 6:
-                    return Arrays.asList(Integer.toString(targetBlockX));
+                    return Collections.singletonList(Integer.toString(targetBlockX));
                 case 4:
                 case 7:
-                    return Arrays.asList(Integer.toString(targetBlockY));
+                    return Collections.singletonList(Integer.toString(targetBlockY));
                 case 5:
                 case 8:
-                    return Arrays.asList(Integer.toString(targetBlockZ));
+                    return Collections.singletonList(Integer.toString(targetBlockZ));
             }
         }
 

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 
 public final class MalSystem extends JavaPlugin {
@@ -87,7 +88,7 @@ public final class MalSystem extends JavaPlugin {
 
         if (!canvasConfigFile.exists()) {
             try {
-                canvasConfigFile.createNewFile();
+                if (!(canvasConfigFile.createNewFile())) System.out.println(pluginPrefix + "Failed to create File canvas.yml");
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
@@ -154,10 +155,10 @@ public final class MalSystem extends JavaPlugin {
 
         File dir = new File("plugins/CanvasMap/images");
         if (!(dir.exists())) {
-            dir.mkdirs();
+            if (!(dir.mkdirs())) System.out.println(pluginPrefix + "Failed to create Directory plugins/CanvasMap/images");
         }
 
-        for (File file : dir.listFiles()) {
+        for (File file : Objects.requireNonNull(dir.listFiles())) {
             if (file.getName().endsWith(".yml")) {
 
                 short uID = (short) Integer.parseInt(file.getName().replaceAll(".yml", ""));

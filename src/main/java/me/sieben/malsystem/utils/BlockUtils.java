@@ -23,7 +23,6 @@ public class BlockUtils {
     int x;
     int y;
     Color color;
-    BufferedImage image;
 
 
     public BlockUtils(int x, int y, Color color) {
@@ -82,13 +81,11 @@ public class BlockUtils {
 
         for (int i = 0; i < originalSize; i++) {
             for (int j = 0; j < originalSize; j++) {
-                int originalX = i;
-                int originalY = j;
 
                 for (int k = 0; k < scaleFactor; k++) {
                     for (int l = 0; l < scaleFactor; l++) {
-                        int newX = originalX * scaleFactor + k;
-                        int newY = originalY * scaleFactor + l;
+                        int newX = i * scaleFactor + k;
+                        int newY = j * scaleFactor + l;
 
                         if (newX >= 0 && newX < scaledSize && newY >= 0 && newY < scaledSize) {
                             int index = j * originalSize + i;
@@ -120,9 +117,9 @@ public class BlockUtils {
 
         if (!configFile.exists()) {
 
-            configFile.getParentFile().mkdirs();
+            if (configFile.getParentFile().mkdirs()) System.out.println(MalSystem.pluginPrefix + "Created Directory plugins/CanvasMap/images/");
             try {
-                configFile.createNewFile();
+                if (!(configFile.createNewFile())) System.out.println(MalSystem.pluginPrefix + "Failed to create image File");
             } catch (IOException e) {
                 e.printStackTrace();
             }

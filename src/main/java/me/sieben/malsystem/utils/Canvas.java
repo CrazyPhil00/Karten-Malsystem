@@ -80,16 +80,16 @@ public class Canvas {
         return i;
     }
 
-    public static boolean createCanvas(Player player, int width, int height) {
+    public static void createCanvas(Player player, int width, int height) {
         if (assignedPlayers.containsKey(player)) {
             player.sendMessage(MalSystem.pluginPrefix + "You are already using a canvas.");
-            return false;
+            return;
         }
         Canvas canvas = Canvas.getEmpty(MalSystem.canvasList, width, height);
 
         if (canvas == null) {
             player.sendMessage(MalSystem.pluginPrefix + "Error while Creating Canvas.");
-            return false;
+            return;
         }
 
         assignedPlayers.put(player, canvas);
@@ -99,8 +99,6 @@ public class Canvas {
 
         CanvasUtils.saveInv(player);
         CanvasUtils.giveColors(player);
-
-        return true;
     }
 
     public static Canvas getAssignedPlayer(Player player) {

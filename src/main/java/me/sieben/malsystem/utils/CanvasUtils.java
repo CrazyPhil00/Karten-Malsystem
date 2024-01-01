@@ -1,11 +1,3 @@
-/**
- *
- * TODO:
- * - Player permission
- *
- */
-
-
 
 
 package me.sieben.malsystem.utils;
@@ -21,7 +13,6 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,8 +20,7 @@ import java.util.List;
 public class CanvasUtils {
 
 
-    private static HashMap<Player, ItemStack[]> savedInv = new HashMap<>();
-    private ArrayList<Player> confirmAbort = new ArrayList<>();
+    private static final HashMap<Player, ItemStack[]> savedInv = new HashMap<>();
 
 
 

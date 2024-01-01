@@ -18,10 +18,9 @@ public class CanvasRenderer extends MapRenderer {
         done = false;
     }
 
-    public boolean loadImage(BufferedImage image) {
+    public void loadImage(BufferedImage image) {
         this.image = image;
         done = false;
-        return true;
     }
 
     @Override

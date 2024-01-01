@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,8 +20,7 @@ import java.util.List;
 
 public class NPCGui {
 
-    private FileConfiguration config = MalSystem.getInstance().getConfig();
-    private static ArrayList<Villager> NPCList = new ArrayList<>();
+    private final FileConfiguration config = MalSystem.getInstance().getConfig();
 
     public void openGuiCreateMap(Player player) {
 
@@ -144,7 +142,9 @@ public class NPCGui {
 
         if (!(npcFile.exists())) {
             try {
-                npcFile.createNewFile();
+                if (!(npcFile.createNewFile())) {
+                    System.out.println(MalSystem.pluginPrefix + "Couldn't create file: npc.yml");
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

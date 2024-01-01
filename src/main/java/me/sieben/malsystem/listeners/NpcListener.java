@@ -1,8 +1,8 @@
 package me.sieben.malsystem.listeners;
 
-import me.sieben.malsystem.utils.CanvasUtils;
 import me.sieben.malsystem.gui.NPCGui;
 import me.sieben.malsystem.utils.Canvas;
+import me.sieben.malsystem.utils.CanvasUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

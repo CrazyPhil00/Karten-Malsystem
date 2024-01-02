@@ -2,6 +2,7 @@ package me.sieben.malsystem.commands;
 
 import me.sieben.malsystem.MalSystem;
 import me.sieben.malsystem.utils.Canvas;
+import me.sieben.malsystem.utils.CanvasUtils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -90,12 +91,13 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
                 config.set("canvas." + canvasName + ".y_pos_2", posY2);
                 config.set("canvas." + canvasName + ".z_pos_2", posZ2);
 
-                config.set("canvas." + canvasName + ".x_tp", player.getLocation().getX());
-                config.set("canvas." + canvasName + ".y_tp", player.getLocation().getY());
-                config.set("canvas." + canvasName + ".z_tp", player.getLocation().getZ());
+                config.set("canvas." + canvasName + ".tp", player.getLocation());
+
 
                 config.set("canvas." + canvasName + ".width", width);
                 config.set("canvas." + canvasName + ".height", height);
+
+                config.set("canvas." + canvasName + ".direction", player.getLocation().getDirection());
 
                 try {
                     config.save(configFile);
@@ -157,6 +159,12 @@ public class CreateCanvas implements CommandExecutor , TabCompleter {
                 if (MalSystem.getInstance().loadCanvases()) {
                     player.sendMessage(MalSystem.pluginPrefix + "Reloaded all Canvases!");
                 }else player.sendMessage(MalSystem.pluginPrefix + "Error loading Canvases");
+                break;
+            }
+
+            case ("stats"):
+            {
+                player.sendMessage(MalSystem.pluginPrefix + CanvasUtils.vector2Direction(player.getLocation().getDirection()));
                 break;
             }
 

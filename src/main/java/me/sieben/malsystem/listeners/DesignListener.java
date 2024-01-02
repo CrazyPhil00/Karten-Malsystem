@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +36,10 @@ public class DesignListener implements Listener {
             if (event.getClickedBlock() == null) block = player.getTargetBlock(null, 50);
             else if (event.getClickedBlock().getType() == Material.WOOL) block = event.getClickedBlock();
 
+            if (block == null) return;
+
             byte color = event.getItem().getData().getData();
 
-            assert block != null;
             block.setData(DyeColor.getByDyeData(color).getWoolData());
 
         } else if (event.getMaterial() == Material.BARRIER) {
@@ -66,6 +68,23 @@ public class DesignListener implements Listener {
 
             CanvasUtils.loadInv(player);
         }
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+
+        if (!(Canvas.containsAssignedPlayer(player))) return;
+
+        player.sendMessage(MalSystem.pluginPrefix + "You left the Canvas Area, your Map was not saved.");
+
+        Canvas.removeAssignedPlayer(player);
+
+        CanvasUtils.loadInv(player);
+
+        resetCanvas(player);
+
+        Canvas.oldPlayerPos.remove(player);
     }
 
     @SuppressWarnings("deprecation")

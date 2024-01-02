@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.List;
@@ -132,9 +133,28 @@ public class CanvasUtils {
         CanvasRenderer mapRenderer = new CanvasRenderer();
 
         List<BlockUtils> list = MalSystem.relativeBlockList.get(player);
-        BlockUtils.saveImage(list, uID);
 
-        mapRenderer.loadImage(BlockUtils.convertToImage(list, size));
+        double degree = 0;
+        boolean mirror = false;
+
+        if (vector2Direction(canvas.getDirection()).equalsIgnoreCase("north")) {
+            degree = 270;
+
+        }else if (vector2Direction(canvas.getDirection()).equalsIgnoreCase("east")) {
+            degree = 180;
+            mirror = true;
+
+        }else if (vector2Direction(canvas.getDirection()).equalsIgnoreCase("south")) {
+            degree = 90;
+            mirror = true;
+
+        }else if (vector2Direction(canvas.getDirection()).equalsIgnoreCase("west")) {
+            degree = 180;
+        }
+
+        BlockUtils.saveImage(list, uID, degree, mirror);
+
+        mapRenderer.loadImage(BlockUtils.convertToImage(list, size, degree, mirror));
 
 
         view.addRenderer(mapRenderer);
@@ -183,5 +203,25 @@ public class CanvasUtils {
             }
         });
 
+    }
+
+
+    public static String vector2Direction(Vector vector) {
+        double x = vector.getX();
+        double z = vector.getZ();
+
+        double angle = Math.atan2(z, x) * (180 / Math.PI);
+
+        angle = (angle + 360) % 360;
+
+        if (angle >= 45 && angle < 135) {
+            return "south";
+        } else if (angle >= 135 && angle < 225) {
+            return "west";
+        } else if (angle >= 225 && angle < 315) {
+            return "north";
+        } else {
+            return "east";
+        }
     }
 }

@@ -55,18 +55,19 @@ public class BlockUtils {
     public static List<BlockUtils> convertTo2DList(List<Block> blockList, int size) {
         int minX = blockList.stream().mapToInt(Block::getX).min().orElse(0);
         int minY = blockList.stream().mapToInt(Block::getY).min().orElse(0);
+        int minZ = blockList.stream().mapToInt(Block::getZ).min().orElse(0);
         int maxY = blockList.stream().mapToInt(Block::getY).max().orElse(0);
 
         List<BlockUtils> blockUtilsList = new ArrayList<>();
-
 
         blockList.forEach(block -> {
             int x = block.getX() - minX;
             int y = block.getY() - minY;
 
+            int z = x != 1 ? block.getZ() - minZ : x;
 
             if (x >= 0 && x < size && y >= 0 && y < size) {
-                blockUtilsList.add(new BlockUtils(x + 1, maxY - y + 1,
+                blockUtilsList.add(new BlockUtils(z + 1, maxY - y + 1,
                         DyeColor.getByWoolData(block.getData()).getColor()));
             }
         });
@@ -74,7 +75,8 @@ public class BlockUtils {
         return blockUtilsList;
     }
 
-    public static BufferedImage convertToImage(List<BlockUtils> blockUtilsList, int originalSize) {
+
+    public static BufferedImage convertToImage(List<BlockUtils> blockUtilsList, int originalSize, double degree, boolean mirror) {
         int scaledSize = 128;
         int scaleFactor = scaledSize / originalSize;
 
@@ -90,28 +92,35 @@ public class BlockUtils {
 
                         if (newX >= 0 && newX < scaledSize && newY >= 0 && newY < scaledSize) {
                             int index = j * originalSize + i;
+                            if (index < blockUtilsList.size()) {
+
+
                             BlockUtils block = blockUtilsList.get(index);
                             Color color = block.getColor();
                             image.setRGB(newX, newY, color.asRGB());
+                            }
                         }
                     }
                 }
             }
         }
 
-        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-        tx.translate(-image.getWidth(null), 0);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        image = op.filter(image, null);
+        if (mirror) {
+            AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+            tx.translate(-image.getWidth(null), 0);
+            AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            image = op.filter(image, null);
+        }
 
-        AffineTransform rotateTransform = AffineTransform.getRotateInstance(Math.toRadians(90), scaledSize / 2.0, scaledSize / 2.0);
+        AffineTransform rotateTransform = AffineTransform.getRotateInstance(Math.toRadians(degree), scaledSize / 2.0, scaledSize / 2.0);
         AffineTransformOp rotateOp = new AffineTransformOp(rotateTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         image = rotateOp.filter(image, null);
 
         return image;
     }
 
-    public static void saveImage(List<BlockUtils> list, int Uid) {
+
+    public static void saveImage(List<BlockUtils> list, int Uid, double degree, boolean mirror) {
 
         File configFile = new File("plugins/CanvasMap/images/" + Uid +".yml");
         FileConfiguration config;
@@ -126,6 +135,10 @@ public class BlockUtils {
             }
 
             config = YamlConfiguration.loadConfiguration(configFile);
+
+            config.set("rotate", degree);
+            config.set("mirror", mirror);
+
 
             int index = 0;
 
@@ -163,6 +176,9 @@ public class BlockUtils {
 
         List<BlockUtils> list = new ArrayList<>();
 
+        double degree = config.getDouble("rotate");
+        boolean mirror = config.getBoolean("mirror");
+
         for (int i = 0; i < size; i++) {
             BlockUtils block = new BlockUtils(
                     config.getInt(i + ".x"),
@@ -174,7 +190,7 @@ public class BlockUtils {
             list.add(i, block);
         }
 
-        return BlockUtils.convertToImage(list, (int) Math.sqrt(size));
+        return BlockUtils.convertToImage(list, (int) Math.sqrt(size), degree, mirror);
     }
 
 

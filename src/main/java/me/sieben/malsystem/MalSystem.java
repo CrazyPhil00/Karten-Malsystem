@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -137,17 +138,16 @@ public final class MalSystem extends JavaPlugin {
                     canvasConfig.getInt("canvas." + s + ".y_pos_2"),
                     canvasConfig.getInt("canvas." + s + ".z_pos_2")};
 
-            Location posTp = new Location(
-                    Bukkit.getWorld("world"),
-                    canvasConfig.getInt("canvas." + s + ".x_tp"),
-                    canvasConfig.getInt("canvas." + s + ".y_tp"),
-                    canvasConfig.getInt("canvas." + s + ".z_tp"));
+            Location posTp = (Location) canvasConfig.get("canvas." + s + ".tp");
+
 
             int width = canvasConfig.getInt("canvas." + s + ".width");
             int height = canvasConfig.getInt("canvas." + s + ".height");
 
+            Vector direction = canvasConfig.getVector("canvas." + s + ".direction");
+
             Canvas.canvasNames.add(s);
-            canvasList.add(new Canvas(posStart, posEnd, posTp, width, height));
+            canvasList.add(new Canvas(posStart, posEnd, posTp, width, height, direction));
         }
 
 
@@ -164,6 +164,11 @@ public final class MalSystem extends JavaPlugin {
                 short uID = (short) Integer.parseInt(file.getName().replaceAll(".yml", ""));
 
                 MapView view = Bukkit.getMap(uID);
+
+                if (view == null) {
+                    System.out.println(MalSystem.pluginPrefix + "Error loading Map-view with ID " + uID);
+                    return false;
+                }
 
                 for (MapRenderer renderer : view.getRenderers()) {
                     view.removeRenderer(renderer);

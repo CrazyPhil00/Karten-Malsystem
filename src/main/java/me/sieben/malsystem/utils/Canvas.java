@@ -3,6 +3,7 @@ package me.sieben.malsystem.utils;
 import me.sieben.malsystem.MalSystem;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,15 +20,17 @@ public class Canvas {
     int height;
     Location tpPos;
     boolean inUse;
+    Vector direction;
 
 
-    public Canvas(int [] canvasPosStart, int[] canvasPosEnd, Location tpPos, int width, int height ) {
+    public Canvas(int [] canvasPosStart, int[] canvasPosEnd, Location tpPos, int width, int height, Vector direction) {
         this.canvasPosStart = canvasPosStart;
         this.canvasPosEnd = canvasPosEnd;
         this.width = width;
         this.height = height;
         this.tpPos = tpPos;
         this.inUse = false;
+        this.direction = direction;
     }
 
     public int[] getCanvasPosEnd() {
@@ -50,6 +53,10 @@ public class Canvas {
         return width;
     }
 
+    public Vector getDirection() {
+        return direction;
+    }
+
     public boolean isInUse() {
         return inUse;
     }
@@ -57,6 +64,7 @@ public class Canvas {
     public void setInUse(boolean inUse) {
         this.inUse = inUse;
     }
+
 
     public static Canvas getEmpty(ArrayList<Canvas> canvas, int width, int height) {
         for (Canvas c : canvas) {
@@ -67,7 +75,7 @@ public class Canvas {
                 }
             }
         }
-        return null; // TODO No empty Canvas Error
+        return null;
     }
 
     public static int getFreeCanvas(int size) {
@@ -92,10 +100,10 @@ public class Canvas {
             return;
         }
 
-        assignedPlayers.put(player, canvas);
-
         oldPlayerPos.put(player, player.getLocation());
         player.teleport(canvas.getTpPos());
+
+        assignedPlayers.put(player, canvas);
 
         CanvasUtils.saveInv(player);
         CanvasUtils.giveColors(player);
